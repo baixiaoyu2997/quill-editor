@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="./public/css/quill.bubble.css" rel="stylesheet">
+    <link href="./public/css/index.css" rel="stylesheet">
+    <script src="./public/js/quill.min.js"></script>
+    <script src="./public/js/vconsole.min.js"></script>
+</head>
+
+<body>
+    <!-- Create the editor container -->
+    <div id="scrolling-container">
+        <div id="editor"></div>
+        <button onclick="onSubmit()">提交按钮</button>
+        <button onclick="setImg()">插入图片</button>
+        <button onclick="setText()">插入文字</button>
+        <button onclick="getFocus()">获取焦点位置</button>
+        <button onclick="getLines()">获取焦点行数</button>
+    </div>
+
+    <!-- Initialize Quill editor -->
+    <script>
+        var vConsole = new VConsole();
+        var quill = new Quill('#editor', {
+            scrollingContainer: 'scrolling-container',
+            placeholder: '请输入正文',
+            theme: 'bubble',
+        });
+        const onSubmit = () => {
+            console.log(quill.getContents());
+            console.log(quill.getText());
+        };
+        const setImg = () => {
+            const index = getFocus();
+            console.log(index);
+            setText(index, "/n");
+            quill.insertEmbed(
+                index + 1,
+                "image",
+                "https://placem.at/things?w=50&random=1"
+            );
+            console.log(getFocus());
+        };
+        const setText = (index, text) => {
+            console.log('==========in')
+            quill.insertText(index, text);
+        };
+        const getFocus = () => {
+            return quill.getSelection().index;
+        };
+        const getLines = () => {
+            console.log(quill.getLines(quill.getFocus()));
+            return quill.getLines(quill.getFocus());
+        }
+    </script>
+   
+</body>
+
+</html>

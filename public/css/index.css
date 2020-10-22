@@ -1,0 +1,41 @@
+html {
+  height: 100%;
+}
+body {
+  margin: 0;
+  height: 100%;
+}
+
+/* Tell Quill not to scroll */
+#quill-container {
+  height: auto;
+  min-height: 100%;
+  padding: 50px;
+}
+#quill-container .ql-editor {
+  overflow-y: visible;
+}
+
+/* Specify our own scrolling container */
+#scrolling-container {
+  height: 100%;
+  min-height: 100%;
+  overflow-y: auto;
+}
+.ql-container {
+  font-size: 16px;
+  font-family: PingFang SC, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  color: #303030;
+  height: 40%;
+}
+
+.ql-editor.ql-blank::before {
+  font-family: PingFang SC, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  /* line-height: 24px; */
+  color: #adadad;
+}
