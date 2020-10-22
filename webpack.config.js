@@ -1,5 +1,4 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const PurgeCSSPlugin = require("purgecss-webpack-plugin");
@@ -59,9 +58,6 @@ module.exports = {
     new MiniCssExtractPlugin(),
     new PurgeCSSPlugin({
       paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
-    }),
-    new CopyWebpackPlugin({
-      patterns: [{ from: "public" }],
     }),
   ],
 };

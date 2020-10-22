@@ -1,5 +1,8 @@
-import './assets/normalize.css'
-import './assets/index.css'
+import './assets/css/normalize.css'
+import './assets/css/index.css'
+import './assets/css/quill.core.css'
+import './assets/js/quill.min.js'
+import './assets/js/dsbridge.js'
 
 const isDebugger = true
         
