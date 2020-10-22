@@ -10,7 +10,6 @@
     <link href="./public/css/index.css" rel="stylesheet">
     <script src="./public/js/quill.min.js"></script>
     <script src="./public/js/dsbridge.js"></script>
-    <script src="./public/js/vconsole.min.js"></script>
 </head>
 
 <body>
@@ -111,7 +110,6 @@
             }
             if (isDebugger) {
                 document.querySelector('.test').classList.remove('test');
-                new VConsole();
                 Quill.debug(true)
                 quill.on('text-change', onTextChange);
                 return {
