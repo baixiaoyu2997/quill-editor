@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="./public/css/normalize.css" rel="stylesheet">
     <link href="./public/css/quill.core.css" rel="stylesheet">
     <link href="./public/css/index.css" rel="stylesheet">
     <script src="./public/js/quill.min.js"></script>
@@ -15,6 +16,9 @@
 <body>
     <!-- Create the editor container -->
     <div id="scrolling-container">
+        <div class="titleInput">
+            <textarea id="title" autocomplete="off" rows=""  cols="" placeholder="请输入标题"></textarea>
+        </div>
         <div id="editor"></div>
         <div class="test">
             <button onclick="quillObj.getContents()">提交按钮</button>
@@ -22,39 +26,52 @@
             <button onclick="quillObj.setText()">插入文字</button>
             <button onclick="quillObj.getFocus()">获取焦点位置</button>
             <button onclick="quillObj.getLines()">获取焦点行数</button>
+            <button onclick="quillObj.setSelection()">设置焦点位置</button>
             <button onclick="quillObj.delText()">删除文字</button>
             <button onclick="quillObj.getLength()">获取文字长度</button>
+            <button onclick="quillObj.getText()">获取文字</button>
+            <button onclick="quillObj.setContents()">插入内容</button>
+            <button onclick="quillObj.setFontSize()">设置size</button>
         </div>
     </div>
 
     <!-- Initialize Quill editor -->
     <script>
-        const isDebugger = true
-        if(isDebugger){
-            document.querySelector('.test').classList.remove('test');
-        }
+        const isDebugger = false
+        
+        const Delta = Quill.import('delta');
+        
         var quill = new Quill('#editor', {
             scrollingContainer: 'scrolling-container',
             placeholder: '请输入正文',
         });
+
+        const textareaEl = document.getElementById('title');
+        textareaEl.addEventListener("input", function (e) {
+            this.style.height = "1em";
+            this.style.height = this.scrollHeight+'px'
+        });
+
         const quillMethods = () => {
+            // production
+            const getContents = () => {
+                console.log({title:textareaEl.value,content:quill.getContents()})
+                return {title:textareaEl.value,content:quill.getContents()}
+            };
             // debugger
             const setImg = () => {
+                quill.focus() // 防止插入图片时没有index
                 const index = getFocus();
-                console.log(index);
-                setText(index, "/n");
-                quill.insertEmbed(
-                    index + 1,
-                    "image",
-                    "https://placem.at/things?w=50&random=1"
-                );
-                console.log(getFocus());
+                quill.updateContents(new Delta().retain(index).insert('\n').insert({ image: 'https://placem.at/things?w=375&random=1' }).insert('\n'))
+                quill.setSelection(index + 3)
             };
             const setText = (index, text) => {
-                console.log('==========in')
-                quill.insertText(index, text);
+                const testText =
+                    quill.insertText(index, text);
             };
             const getFocus = () => {
+                console.log('==========获取焦点位置')
+                console.log(quill.getSelection().index)
                 return quill.getSelection().index;
             };
             const getLines = () => {
@@ -68,26 +85,62 @@
             const delText = () => {
                 quill.deleteText(3, 3)
             }
-            // production
-            const getContents = () => {
-                console.log(quill.getContents());
-                console.log(quill.getText());
-            };
-            return isDebugger ? new VConsole() && {
-                setImg,
-                setText,
-                getFocus,
-                getLines,
-                getContents,
-                delText,
-                getLength
-            } : { getContents }
+            const getText = () => {
+                console.log(quill.getContents())
+                console.log(quill.getText())
+                return quill.getText()
+            }
+            const setContents = () => {
+                quill.setContents([
+                    { insert: 'Hello ' },
+                    { insert: 'World!', attributes: { bold: true } },
+                ]);
+            }
+            const setFontSize = () => {
+                quill.format('size', 'huge')
+            }
+            const onTextChange = (delta, oldDelta, source) => {
+                if (source == 'api') {
+                    console.log("===============API");
+                } else if (source == 'user') {
+                    console.log("===============User");
+                }
+            }
+            const setSelection = () => {
+                quill.setSelection(Math.floor(Math.random() * 10))
+            }
+            if (isDebugger) {
+                document.querySelector('.test').classList.remove('test');
+                new VConsole();
+                Quill.debug(true)
+                quill.on('text-change', onTextChange);
+                return {
+                    setImg,
+                    setText,
+                    getFocus,
+                    getLines,
+                    getContents,
+                    delText,
+                    getLength,
+                    getText,
+                    setContents,
+                    setFontSize,
+                    onTextChange,
+                    setSelection
+                }
+            } else {
+                return { getContents }
+            }
+
         }
 
         const quillObj = quillMethods()
 
         // bridge
-        dsBridge.register('getContents', quillObj.getContents)
+        // dsBridge.register('insertCoin', quillObj.xxx) // id,name
+        // dsBridge.register('insertTopic', quillObj.xxx) // id,name
+        // dsBridge.register('insertImage', quillObj.xxx) // id,filepath,name,url
+        dsBridge.register('getContent', quillObj.getContents)
     </script>
 
 </body>

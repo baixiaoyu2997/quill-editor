@@ -21,16 +21,43 @@ body {
   height: 100%;
   min-height: 100%;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
+#scrolling-container  .titleInput{
+  flex-shrink: 0;
+  margin: 0 15px;
+  border-bottom: 1px solid rgb(242, 242, 242);
+  padding: 18px 0;
+  box-sizing: border-box;
+  font-size: 18px;
+}
+#scrolling-container  .titleInput textarea{
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  border: 0;
+  height: 1em;
+  font-size: 18px;
+  font-weight: 600;
+  resize:none;
+}
+
 .ql-container {
   font-size: 16px;
   font-family: PingFang SC, sans-serif;
   font-style: normal;
   font-weight: normal;
   color: #303030;
-  height: 40%;
+  height: 100%;
 }
 
+.ql-editor img {
+  width: 100%;
+  height: auto;
+  border-radius: 7px;
+}
 .ql-editor.ql-blank::before {
   font-family: PingFang SC, sans-serif;
   font-style: normal;
@@ -39,6 +66,6 @@ body {
   /* line-height: 24px; */
   color: #adadad;
 }
-.test{
+.test {
   display: none;
 }
