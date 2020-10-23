@@ -2,6 +2,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const path = require("path");
 const glob = require("glob");
@@ -11,7 +13,6 @@ const PATHS = {
 };
 
 module.exports = {
-  mode: "production",
   module: {
     rules: [
       {
@@ -20,40 +21,57 @@ module.exports = {
       },
     ],
   },
+  target: "web",
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
   },
+  devServer: {
+    // contentBase: './dist',
+    hot: true,
+  },
+  externals: {
+    Quill: "Quill",
+  },
   optimization: {
     minimize: true,
     minimizer: [
-      // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
-      // `...`
+      new TerserPlugin({
+        exclude: "**/quill.core.js",
+        terserOptions: {
+          mangle: false,
+          compress: {
+            drop_console: true,
+          },
+          output: {
+            comments: false,
+          },
+        },
+        extractComments: false,
+      }),
       new CssMinimizerPlugin({
         minimizerOptions: {
           preset: [
-            "default",
+            "advanced",
             {
               discardComments: { removeAll: true },
             },
           ],
         },
       }),
+      "...",
     ],
-    splitChunks: {
-      cacheGroups: {
-        styles: {
-          name: "styles",
-          test: /\.css$/,
-          chunks: "all",
-          enforce: true,
-        },
-      },
-    },
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({ template: "./index.html" }),
     new MiniCssExtractPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, "./src/assets/js/quill.core.js"),
+        }, // 打包后静态文件放置位置
+      ],
+    }),
   ],
 };
