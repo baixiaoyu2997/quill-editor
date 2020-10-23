@@ -3,7 +3,7 @@ import './assets/css/index.css'
 import './assets/css/quill.core.css'
 import './assets/js/dsbridge.js'
 
-const isDebugger = true
+const isDebugger = process.env.NODE_ENV==="development"
         
 const Delta = Quill.import('delta');
 

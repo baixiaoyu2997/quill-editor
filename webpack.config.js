@@ -27,11 +27,7 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
   },
   devServer: {
-    // contentBase: './dist',
     hot: true,
-  },
-  externals: {
-    Quill: "Quill",
   },
   optimization: {
     minimize: true,

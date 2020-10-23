@@ -5,8 +5,8 @@
   "author": "L.Rain <bxy2997@sina.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack serve",
-    "build": "webpack"
+    "dev": "webpack serve --mode=development",
+    "build": "webpack --mode=production"
   },
   "dependencies": {
     "parcel-bundler": "^1.12.4"
