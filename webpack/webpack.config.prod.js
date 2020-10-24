@@ -1,11 +1,15 @@
 const Webpack = require('webpack');
+const Path = require("path");
 const { merge } = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default;
+const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
   mode: 'production',
-  devtool: 'source-map',
+  // devtool: 'source-map',
   stats: 'errors-only',
   bail: true,
   output: {
@@ -19,6 +23,12 @@ module.exports = merge(common, {
     new MiniCssExtractPlugin({
       filename: 'bundle.css',
     }),
+    new HtmlWebpackPlugin({
+      inlineSource: ".(js)$",
+      template: Path.resolve(__dirname, "../src/index.html"),
+    }),
+    new HTMLInlineCSSWebpackPlugin(),
+    new HtmlWebpackInlineSourcePlugin(HtmlWebpackPlugin)
   ],
   module: {
     rules: [
