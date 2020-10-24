@@ -1,3 +1,5 @@
+import 'normalize.css'
+import 'quill/dist/quill.core.css'
 import "../styles/index.css";
 import Quill from "quill";
 if (process.env.NODE_ENV === "development") {
