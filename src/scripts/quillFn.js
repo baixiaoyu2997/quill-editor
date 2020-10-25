@@ -1,8 +1,7 @@
 import Quill from "quill";
 import { getQueryVariable } from "./utils";
+import loadingImg from '../../public/loading.gif';
 const Delta = Quill.import("delta");
-
-const isDebugger = process.env.NODE_ENV === "development";
 
 const quill = new Quill("#editor", {
   scrollingContainer: "scrolling-container",
@@ -27,7 +26,6 @@ export const getFocus = () => {
   return quill.getSelection().index;
 };
 export const setImg = (id, filepath, name, url) => {
-  const loadingImg = "../../public/loading.gif";
   quill.focus(); // 防止插入图片时没有index
   const index = getFocus();
 

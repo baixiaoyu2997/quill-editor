@@ -6,7 +6,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default;
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const common = require('./webpack.common.js');
-
 module.exports = merge(common, {
   mode: 'production',
   // devtool: 'source-map',
@@ -19,6 +18,7 @@ module.exports = merge(common, {
   plugins: [
     new Webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
+      'process.env.TEST_ENV': JSON.stringify(process.env.TEST_ENV),
     }),
     new MiniCssExtractPlugin({
       filename: 'bundle.css',
