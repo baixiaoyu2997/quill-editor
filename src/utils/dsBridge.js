@@ -12,6 +12,7 @@ const methods = {
   canSubmit: (bool) => {
     setGlobal("CAN_SUBMIT", bool);
     dsBridge.call("canSubmit", bool);
+    console.log("===========in:" + bool);
   },
 };
 

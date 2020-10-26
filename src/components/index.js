@@ -1,4 +1,5 @@
 import Quill from "quill";
+import { setImg } from "../utils/quillFn";
 const BlockEmbed = Quill.import("blots/block/embed");
 const Embed = Quill.import("blots/embed");
 
@@ -8,10 +9,12 @@ class ImageBlot extends BlockEmbed {
     let node = super.create();
     node.setAttribute("id", value.id);
     node.setAttribute("src", value.url);
-    // node.setAttribute('href','javascript:void(0);')
-    // const img=document.createElement('img')
-    // img.src=value.url
-    // node.appendChild(img)
+    node.setAttribute("contenteditable", false);
+    node.setAttribute("tabindex", -1);
+    node.addEventListener("click", (e)=>{setImg(null,null,null,e)}); // 只有点击删除的时候触发
+    const img = document.createElement("img");
+    img.src = value.url;
+    node.appendChild(img);
     return node;
   }
 
@@ -23,7 +26,8 @@ class ImageBlot extends BlockEmbed {
   }
 }
 ImageBlot.blotName = "image";
-ImageBlot.tagName = "img";
+ImageBlot.className = "quill-img";
+ImageBlot.tagName = "div";
 
 // 标签组件
 class QuillHashtag extends Embed {
@@ -39,7 +43,7 @@ class QuillHashtag extends Embed {
 }
 QuillHashtag.blotName = "hashtag";
 QuillHashtag.className = "quill-hashtag";
-QuillHashtag.tagName = "span";
+QuillHashtag.tagName = "a";
 
 Quill.register(ImageBlot);
 Quill.register(QuillHashtag);

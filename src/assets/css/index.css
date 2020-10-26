@@ -60,10 +60,48 @@ body {
   color: #007bff;
 }
 
+#editor .ql-editor .quill-img {
+  position: relative;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+#editor .ql-editor .quill-img:focus {
+  outline: none;
+  pointer-events: none;
+}
+
+#editor .ql-editor .quill-img:focus::after {
+  position: absolute;
+  content: "";
+  top: 0;
+  right: 0;
+  background: url(~/assets/close.svg);
+  background-size: cover;
+  height: 40px;
+  width: 40px;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+#editor .ql-editor .quill-img:focus::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: black;
+  opacity: 0.6;
+  z-index: 1;
+}
+
 #editor .ql-editor img {
   width: 100%;
   height: auto;
   border-radius: 7px;
+  display: block;
+  position: relative;
 }
 
 #editor .ql-editor.ql-blank::before {

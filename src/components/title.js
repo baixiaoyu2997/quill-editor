@@ -7,3 +7,5 @@ titleEl.addEventListener("input", function (e) {
 });
 
 export const titleWrapEl = document.getElementsByClassName("titleInput")[0];
+
+// document.getElementsByClassName('.ql-editor')[0].addEventListener('click',)

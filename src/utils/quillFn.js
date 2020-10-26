@@ -36,49 +36,55 @@ export const getContents = () => {
 export const getFocus = () => {
   return quill.getSelection().index;
 };
-export const setImg = (id, code, url) => {
+export const setImg = (id, code, url, event) => {
   // code 0：加载失败 1：加载成功 2:加载中
   if (code === 2) {
-    // 加载中就设置不能提交
-    dsBridge.canSubmit(false);
-
     quill.focus(); // 防止插入图片时没有index
+
     const index = getFocus();
 
     quill.updateContents(
       new Delta().retain(index).insert({ image: { url: loadingImg, id: id } })
     );
 
-    loadingImgs[id] = quill.getLeaf(index === 0 ? 0 : index + 1)[0];
+    loadingImgs[id] = {
+      blot: quill.getLeaf(index === 0 ? 0 : index + 1)[0],
+      load: false,
+    };
     quill.setSelection(index + 2);
     window.scrollTo({
       top: quill.getBounds(index + 2).top,
     });
+    // 加载中就设置不能提交
+    dsBridge.canSubmit(false);
   } else if (code === 1) {
+    const index = quill.getIndex(loadingImgs[id].blot);
     quill.focus();
-    const index = quill.getIndex(loadingImgs[id]);
+
     quill.updateContents(
       new Delta()
         .retain(index)
         .delete(1)
-        .insert({ image: { url } })
+        .insert({ image: { url, id: id } })
     );
+    loadingImgs[id].blot = quill.getLeaf(getFocus() - 1)[0];
+    loadingImgs[id].load = true;
+
     quill.setSelection(index + 1);
     window.scrollTo({
       top: quill.getBounds(index + 3).top,
     });
-
-    delete loadingImgs[id];
-    // 如果都上传完毕那么可以提交
-    if (Object.keys(loadingImgs) === 0) {
-      dsBridge.canSubmit(true);
-    }
   } else {
-    const index = quill.getIndex(loadingImgs[id]);
-    console.log(index)
-    quill.updateContents(new Delta().retain(index - 1).delete(index===0?1:2));
-    delete loadingImgs[id];
-    dsBridge.uploadImgFailed();
+    const id = event ? event.target.id : id;
+    const index = quill.getIndex(loadingImgs[id].blot);
+    quill.updateContents(
+      new Delta().retain(index - 1).delete(index === 0 ? 1 : 2)
+    );
+    loadingImgs[id].load = event ? true : false;
+
+    if (code === 0) {
+      dsBridge.uploadImgFailed();
+    }
   }
 };
 export const showTitle = (bool) => {
@@ -105,7 +111,9 @@ export const canSubmit = () => {
 };
 
 // debugger
-
+export const test = () => {
+  alert(1);
+};
 export const setText = () => {
   quill.focus();
   const index = getFocus();
@@ -149,7 +157,7 @@ export const onTextChange = (delta, oldDelta, source) => {
   // 手动删除时去除loadingImgs内数据
   newDelta.diff(oldDelta).forEach((x) => {
     if (x.insert && x.insert.image) {
-      delete loadingImgs[x.insert.image.id];
+      loadingImgs[x.insert.image.id].load = true;
     }
   });
   canSubmit();
