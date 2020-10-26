@@ -74,6 +74,10 @@ body {
   color: #adadad;
 }
 
+#scrolling-container .hide {
+  display: none;
+}
+
 #scrolling-container .test {
   display: none;
 }

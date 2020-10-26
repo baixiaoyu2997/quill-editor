@@ -6,7 +6,7 @@ const Embed = Quill.import("blots/embed");
 class ImageBlot extends BlockEmbed {
   static create(value) {
     let node = super.create();
-    node.setAttribute("alt", value.alt);
+    node.setAttribute("id", value.id);
     node.setAttribute("src", value.url);
     // node.setAttribute('href','javascript:void(0);')
     // const img=document.createElement('img')
@@ -17,7 +17,7 @@ class ImageBlot extends BlockEmbed {
 
   static value(node) {
     return {
-      alt: node.getAttribute("alt"),
+      id: node.getAttribute("id"),
       url: node.getAttribute("src"),
     };
   }

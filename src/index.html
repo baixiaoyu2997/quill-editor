@@ -9,14 +9,16 @@
 
 <body>
   <div id="scrolling-container">
-    <div class="titleInput">
+    <div class="titleInput hide">
       <textarea id="title" autocomplete="off" rows="" cols="" placeholder="请输入标题"></textarea>
     </div>
     <div id="editor"></div>
     <div class="test flot">
       <button onclick="quillFn.getContents()">提交按钮</button>
-      <button onclick="quillFn.setImg()">插入图片</button>
-      <button onclick="quillFn.setImg('loading')">插入loading图片</button>
+      <button onclick="quillFn.setImg(17,2)">插入loading图片</button>
+      <button
+        onclick="quillFn.setImg(17,1,`https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2569057852,1735884540&fm=58`)">插入已上传图片</button>
+      <button onclick="quillFn.setImg(17,0)">图片加载失败</button>
       <button onclick="quillFn.setText()">插入文字</button>
       <button onclick="quillFn.getFocus()">获取焦点位置</button>
       <button onclick="quillFn.getLines()">获取焦点行数</button>
@@ -26,6 +28,9 @@
       <button onclick="quillFn.getText()">获取文字</button>
       <button onclick="quillFn.setContents()">插入内容</button>
       <button onclick="quillFn.setFontSize()">设置size</button>
+      <button onclick="quillFn.showTitle(true)">显示title</button>
+      <button onclick="quillFn.showTitle(false)">隐藏title</button>
+      <button onclick="quillFn.canSubmit()">能否提交</button>
       <!-- <button onclick="quillFn.getIndex()">获取Blot的Index</button> -->
     </div>
   </div>
