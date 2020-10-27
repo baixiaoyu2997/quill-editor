@@ -7,6 +7,7 @@ import "./test";
 
 const Delta = Quill.import("delta");
 const loadingImgs = {};
+const textLine = {};
 const quill = new Quill("#editor", {
   scrollingContainer: "scrolling-container",
   placeholder: "请输入正文",
@@ -88,20 +89,11 @@ const addImg = ({
   selectIndex,
   deleteOptions,
 }) => {
-  if (deleteOptions) {
-    quill.updateContents(
-      deleteImg({ id, ...deleteOptions }).insert({ image: { url, id: id } })
-    );
-    console.log("===========in 添加后删除内容");
-    console.log(quill.getContents());
-  } else {
-    quill.updateContents(
-      new Delta().retain(boltIndex).insert({ image: { url, id: id } })
-    );
-    console.log("===========in 添加loading后内容");
-    console.log(quill.getContents());
-  }
-
+  quill.updateContents(
+    deleteOptions
+      ? deleteImg({ id, ...deleteOptions })
+      : new Delta().retain(boltIndex).insert({ image: { url, id: id } })
+  );
   loadingImgs[id] = {
     bolt: newBolt(),
     code,
@@ -157,10 +149,17 @@ export const onTextChange = (delta, oldDelta, source) => {
   // 编辑器值改变时判断是否能提交
   canSubmit();
 };
-export const setTextLine = (id, name, sign) => {
+export const setTextLine = (id, name, type) => {
   quill.focus();
-  const index = getFocus();
-  quill.insertEmbed(index, "textLine", { id, name, sign });
+  let index = getFocus();
+  // 超话和比特币只能各有一个
+  if (textLine[type]) {
+    const prevBlotIndex = quill.getIndex(textLine[type]);
+    quill.updateContents(new Delta().retain(prevBlotIndex).delete(1));
+    index = index + (prevBlotIndex < index ? -1 : 0);
+  }
+  quill.insertEmbed(index, "textLine", { id, name, type });
+  textLine = { [type]: quill.getLeaf(index + 1)[0] };
   quill.setSelection(index + 1);
 };
 quill.on("text-change", onTextChange);

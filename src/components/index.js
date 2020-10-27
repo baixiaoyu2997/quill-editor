@@ -36,7 +36,10 @@ class TextLine extends Embed {
   static create(value) {
     let node = super.create(value);
     node.setAttribute("contenteditable", false);
-    node.innerText = `${value.sign+value.name+value.sign}`;
+    node.innerText = `${
+      this[value.type].sign + value.name + this[value.type].sign
+    }`;
+    node.setAttribute("style", this[value.type].style);
     return node;
   }
   static value(node) {
@@ -46,6 +49,14 @@ class TextLine extends Embed {
 TextLine.blotName = "textLine";
 TextLine.className = "quill-textLine";
 TextLine.tagName = "a";
+TextLine.top = {
+  sign: "#",
+  style: "color:#FFA033;",
+};
+TextLine.coin = {
+  sign: "$",
+  style: "color:#007bff;",
+};
 
 Quill.register(ImageBlot);
 Quill.register(TextLine);

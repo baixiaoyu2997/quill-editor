@@ -3,5 +3,5 @@ export const globals = {
   CAN_SUBMIT: false,
 };
 export const setGlobal = (name, value) => {
-  return globals[name] = value
+  globals[name] = value;
 };

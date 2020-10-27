@@ -56,10 +56,6 @@ body {
   overflow: unset;
 }
 
-#editor .ql-editor .quill-textLine {
-  color: #007bff;
-}
-
 #editor .ql-editor .quill-img {
   position: relative;
   border-radius: 7px;
