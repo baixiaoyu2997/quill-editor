@@ -11,8 +11,8 @@ class ImageBlot extends BlockEmbed {
     node.setAttribute("src", value.url);
     node.setAttribute("contenteditable", false);
     node.setAttribute("tabindex", -1);
-    node.addEventListener("click", (event) => {
-      setImg({ event });
+    node.addEventListener("click", (e) => {
+      setImg(null, null, null, e);
     }); // 只有点击删除的时候触发
     const img = document.createElement("img");
     img.src = value.url;
