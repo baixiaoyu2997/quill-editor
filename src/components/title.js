@@ -3,9 +3,7 @@ export const titleEl = document.getElementById("title");
 titleEl.addEventListener("input", function (e) {
   this.style.height = "1.1em";
   this.style.height = this.scrollHeight + "px";
-  canSubmit()
+  canSubmit();
 });
 
 export const titleWrapEl = document.getElementsByClassName("titleInput")[0];
-
-// document.getElementsByClassName('.ql-editor')[0].addEventListener('click',)

@@ -1,11 +1,4 @@
 // debugger
-export const setText = () => {
-  quill.focus();
-  const index = getFocus();
-  quill.insertEmbed(index, "hashtag", "超话重在参与");
-  quill.setSelection(index + 1);
-};
-
 export const getLines = () => {
   console.log(quill.getLines(getFocus()));
   return quill.getLines(getFocus());

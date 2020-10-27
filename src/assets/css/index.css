@@ -56,7 +56,7 @@ body {
   overflow: unset;
 }
 
-#editor .ql-editor .quill-hashtag {
+#editor .ql-editor .quill-textLine {
   color: #007bff;
 }
 

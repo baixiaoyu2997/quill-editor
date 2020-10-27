@@ -28,7 +28,7 @@ export const getFocus = () => {
   // console.log(quill.getSelection().index);
   return quill.getSelection().index;
 };
-export const setImg = (id, code, url, event) => {
+export const setImg = ({ id, code, url, event }) => {
   // code 0：加载失败 1：加载成功 2:加载中
   if (code === 2) {
     quill.focus(); // 防止插入图片时没有index
@@ -76,10 +76,6 @@ export const setImg = (id, code, url, event) => {
         event,
       })
     );
-    // 区分是由关闭icon触发还是客户端触发
-    if (!event) {
-      dsBridgeFn.uploadImgFailed();
-    }
   }
 };
 // 添加图片
@@ -161,11 +157,10 @@ export const onTextChange = (delta, oldDelta, source) => {
   // 编辑器值改变时判断是否能提交
   canSubmit();
 };
-
-quill.on("text-change", onTextChange);
-
-export const dsBridgeFn = {
-  uploadImgFailed: () => {
-    dsBridge.call("uploadImgFailed");
-  },
+export const setTextLine = (data) => {
+  quill.focus();
+  const index = getFocus();
+  quill.insertEmbed(index, "textLine", data);
+  quill.setSelection(index + 1);
 };
+quill.on("text-change", onTextChange);
