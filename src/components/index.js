@@ -7,15 +7,14 @@ const Embed = Quill.import("blots/embed");
 class ImageBlot extends BlockEmbed {
   static create(value) {
     let node = super.create();
-    node.setAttribute("id", value.id);
-    node.setAttribute("src", value.url);
     node.setAttribute("contenteditable", false);
+    node.setAttribute("id", value.id);
     node.setAttribute("tabindex", -1);
     node.addEventListener("click", (e) => {
       setImg(null, null, null, e);
     }); // 只有点击删除的时候触发
     const img = document.createElement("img");
-    img.src = value.url;
+    img.setAttribute("src", value.src);
     node.appendChild(img);
     return node;
   }
@@ -23,7 +22,7 @@ class ImageBlot extends BlockEmbed {
   static value(node) {
     return {
       id: node.getAttribute("id"),
-      url: node.getAttribute("src"),
+      src: node.firstChild.getAttribute("src"),
     };
   }
 }
@@ -36,14 +35,21 @@ class TextLine extends Embed {
   static create(value) {
     let node = super.create(value);
     node.setAttribute("contenteditable", false);
-    node.innerText = `${
-      this[value.type].sign + value.name + this[value.type].sign
+    node.setAttribute("type", value.type);
+    node.setAttribute("text", value.text);
+    node.setAttribute("id", value.id);
+    node.innerHTML = `${
+      this[value.type].sign + value.text + this[value.type].sign
     }`;
-    node.setAttribute("style", this[value.type].style);
+    node.classList.add(value.type);
     return node;
   }
   static value(node) {
-    return node.innerText;
+    return {
+      id: node.getAttribute("id"),
+      text: node.getAttribute("text"),
+      type: node.getAttribute("type"),
+    };
   }
 }
 TextLine.blotName = "textLine";
@@ -51,11 +57,9 @@ TextLine.className = "quill-textLine";
 TextLine.tagName = "a";
 TextLine.top = {
   sign: "#",
-  style: "color:#FFA033;",
 };
 TextLine.coin = {
   sign: "$",
-  style: "color:#007bff;",
 };
 
 Quill.register(ImageBlot);

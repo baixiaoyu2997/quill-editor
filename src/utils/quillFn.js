@@ -3,11 +3,17 @@ import { getQueryVariable } from "./index";
 import loadingSVG from "../assets/loading.svg";
 import { titleEl, titleWrapEl } from "../components/title";
 import { globals, setGlobal } from "../global";
+import { formatSubmit, resetFormat } from "./index";
+import readOnlyStyle from "!!raw-loader!../assets/css/readOnly.css";
+const readOnlyCss = `<style>${readOnlyStyle}</style>`;
+
 import "./test";
 
-const Delta = Quill.import("delta");
 const loadingImgs = {};
 const textLine = {};
+
+const Delta = Quill.import("delta");
+
 const quill = new Quill("#editor", {
   scrollingContainer: "scrolling-container",
   placeholder: "请输入正文",
@@ -16,10 +22,12 @@ const quill = new Quill("#editor", {
 const initQuillValue = quill.getContents();
 // 提交
 export const getContents = () => {
+  const content = formatSubmit(quill.getContents());
+  
   const contents = {
     title: titleEl.value,
-    content: quill.getContents(),
-    html: quill.root.innerHTML,
+    content,
+    html: readOnlyCss + quill.root.innerHTML,
     canSubmit: globals.CAN_SUBMIT,
   };
   return contents;
@@ -29,15 +37,15 @@ export const getFocus = () => {
   // console.log(quill.getSelection().index);
   return quill.getSelection().index;
 };
-export const setImg = (id, code, url, event) => {
+export const setImg = (id, code, src, event) => {
   // code 0：加载失败 1：加载成功 2:加载中
   if (code === 2) {
     quill.focus(); // 防止插入图片时没有index
     const boltIndex = getFocus();
     const selectIndex = boltIndex + 2;
-    const url = loadingSVG;
+    const src = loadingSVG;
     const newBolt = () => quill.getLeaf(boltIndex === 0 ? 0 : boltIndex + 1)[0];
-    addImg({ url, id, newBolt, code: 2, boltIndex, selectIndex });
+    addImg({ src, id, newBolt, code: 2, boltIndex, selectIndex });
 
     // 加载中就设置不能提交
     setGlobal("CAN_SUBMIT", false);
@@ -58,7 +66,7 @@ export const setImg = (id, code, url, event) => {
       return quill.getLeaf(getFocus() - 1)[0];
     };
     addImg({
-      url,
+      src,
       id,
       newBolt,
       code: 1,
@@ -83,7 +91,7 @@ export const setImg = (id, code, url, event) => {
 // 添加图片
 const addImg = ({
   id,
-  url,
+  src,
   boltIndex,
   newBolt,
   code,
@@ -93,11 +101,11 @@ const addImg = ({
   // 不要对if else中的内容进行简写
   if (deleteOptions) {
     quill.updateContents(
-      deleteImg({ id, ...deleteOptions }).insert({ image: { url, id: id } })
+      deleteImg({ id, ...deleteOptions }).insert({ image: { src, id: id } })
     );
   } else {
     quill.updateContents(
-      new Delta().retain(boltIndex).insert({ image: { url, id: id } })
+      new Delta().retain(boltIndex).insert({ image: { src, id: id } })
     );
   }
   loadingImgs[id] = {
@@ -122,6 +130,7 @@ export const showTitle = (bool) => {
   } else {
     titleWrapEl.classList.add("hide");
   }
+  canSubmit();
 };
 // 判断是否能提交
 export const canSubmit = () => {
@@ -155,7 +164,7 @@ export const onTextChange = (delta, oldDelta, source) => {
   // 编辑器值改变时判断是否能提交
   canSubmit();
 };
-export const setTextLine = (id, name, type) => {
+export const setTextLine = (id, text, type) => {
   quill.focus();
   let index = getFocus();
   // 超话和比特币只能各有一个
@@ -164,8 +173,9 @@ export const setTextLine = (id, name, type) => {
     quill.updateContents(new Delta().retain(prevBlotIndex).delete(1));
     index = index + (prevBlotIndex < index ? -1 : 0);
   }
-  quill.insertEmbed(index, "textLine", { id, name, type });
+  quill.insertEmbed(index, "textLine", { id, text, type });
   textLine[type] = quill.getLeaf(index + 1)[0];
+  quill.insertText(index + 1, ' ', Quill.sources.SILENT) // 修复safari浏览器光标错位的问题，https://github.com/quilljs/quill/issues/1181#issuecomment-292513275
   quill.setSelection(index + 1);
 };
 quill.on("text-change", onTextChange);

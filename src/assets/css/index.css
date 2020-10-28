@@ -21,7 +21,7 @@ body {
   border-bottom: 1px solid rgb(242, 242, 242);
   padding: 18px 0;
   box-sizing: border-box;
-  font-size: 18px;
+  font-size: 4.4vw;
 }
 
 #scrolling-container .titleInput textarea {
@@ -31,7 +31,7 @@ body {
   box-sizing: border-box;
   border: 0;
   height: 1.1em;
-  font-size: 18px;
+  font-size: 4.4vw;
   font-weight: 600;
   resize: none;
 }
@@ -42,7 +42,6 @@ body {
 
 #editor {
   flex: 1;
-  font-size: 16px;
   font-family: PingFang SC, sans-serif;
   font-style: normal;
   font-weight: normal;
@@ -58,7 +57,6 @@ body {
 
 #editor .ql-editor .quill-img {
   position: relative;
-  border-radius: 7px;
   overflow: hidden;
 }
 
@@ -92,19 +90,11 @@ body {
   z-index: 1;
 }
 
-#editor .ql-editor img {
-  width: 100%;
-  height: auto;
-  border-radius: 7px;
-  display: block;
-  position: relative;
-}
-
 #editor .ql-editor.ql-blank::before {
   font-family: PingFang SC, sans-serif;
   font-style: normal;
   font-weight: normal;
-  font-size: 16px;
+  font-size: 4vw;
   color: #adadad;
 }
 
@@ -116,7 +106,8 @@ body {
   display: none;
 }
 
-#scrolling-container .test.flot {
+#scrolling-container .flot {
+  font-size: 20px;
   position: absolute;
   bottom: 0;
   left: 15;
