@@ -19,7 +19,7 @@ export const getContents = () => {
   const contents = {
     title: titleEl.value,
     content: quill.getContents(),
-    html: document.getElementsByTagName("html")[0].outerHTML,
+    html: quill.root.innerHTML,
     canSubmit: globals.CAN_SUBMIT,
   };
   return contents;
@@ -49,6 +49,7 @@ export const setImg = (id, code, url, event) => {
       return;
     }
     const boltIndex = quill.getIndex(loadingImgs[id].bolt);
+    console.log("=======加载中图片位置：" + boltIndex);
     const deleteOptions = {
       rLength: boltIndex,
       dLength: 1,
@@ -89,11 +90,16 @@ const addImg = ({
   selectIndex,
   deleteOptions,
 }) => {
-  quill.updateContents(
-    deleteOptions
-      ? deleteImg({ id, ...deleteOptions })
-      : new Delta().retain(boltIndex).insert({ image: { url, id: id } })
-  );
+  // 不要对if else中的内容进行简写
+  if (deleteOptions) {
+    quill.updateContents(
+      deleteImg({ id, ...deleteOptions }).insert({ image: { url, id: id } })
+    );
+  } else {
+    quill.updateContents(
+      new Delta().retain(boltIndex).insert({ image: { url, id: id } })
+    );
+  }
   loadingImgs[id] = {
     bolt: newBolt(),
     code,
@@ -159,7 +165,7 @@ export const setTextLine = (id, name, type) => {
     index = index + (prevBlotIndex < index ? -1 : 0);
   }
   quill.insertEmbed(index, "textLine", { id, name, type });
-  textLine = { [type]: quill.getLeaf(index + 1)[0] };
+  textLine[type] = quill.getLeaf(index + 1)[0];
   quill.setSelection(index + 1);
 };
 quill.on("text-change", onTextChange);
