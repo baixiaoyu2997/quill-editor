@@ -8,7 +8,6 @@ import readOnlyStyle from "!!raw-loader!../assets/css/readOnly.css";
 const readOnlyCss = `<style>${readOnlyStyle}</style>`;
 
 import "./test";
-
 const loadingImgs = {};
 const textLine = {};
 
@@ -22,13 +21,13 @@ const quill = new Quill("#editor", {
 const initQuillValue = quill.getContents();
 // 提交
 export const getContents = () => {
-  const content = formatSubmit(quill.getContents());
-  
+  const commitObj = formatSubmit(quill.getContents());
+
   const contents = {
-    title: titleEl.value,
-    content,
+    title: globals.SHOW_TITLE ? titleEl.value : "",
     html: readOnlyCss + quill.root.innerHTML,
     canSubmit: globals.CAN_SUBMIT,
+    ...commitObj,
   };
   return contents;
 };
@@ -175,7 +174,7 @@ export const setTextLine = (id, text, type) => {
   }
   quill.insertEmbed(index, "textLine", { id, text, type });
   textLine[type] = quill.getLeaf(index + 1)[0];
-  quill.insertText(index + 1, ' ', Quill.sources.SILENT) // 修复safari浏览器光标错位的问题，https://github.com/quilljs/quill/issues/1181#issuecomment-292513275
+  quill.insertText(index + 1, " ", Quill.sources.SILENT); // 修复safari浏览器光标错位的问题，https://github.com/quilljs/quill/issues/1181#issuecomment-292513275
   quill.setSelection(index + 1);
 };
 quill.on("text-change", onTextChange);

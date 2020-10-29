@@ -1,7 +1,6 @@
 // debugger
-export const getLines = () => {
-  console.log(quill.getLines(getFocus()));
-  return quill.getLines(getFocus());
+export const focus = () => {
+  return quill.focus();
 };
 export const getLength = () => {
   alert(quill.getLength());
