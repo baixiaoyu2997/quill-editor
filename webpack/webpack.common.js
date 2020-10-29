@@ -4,9 +4,6 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  // entry: {
-  //   app: Path.resolve(__dirname, "../src/index.js"),
-  // },
   output: {
     path: Path.join(__dirname, "../dist"),
     publicPath: "/",

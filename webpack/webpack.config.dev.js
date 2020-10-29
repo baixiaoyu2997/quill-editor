@@ -12,11 +12,10 @@ module.exports = merge(common, {
     chunkFilename: "js/[name].chunk.js",
   },
   devServer: {
-    inline: true,
+    open: true,
     hot: true,
     host: "0.0.0.0",
-    open: true,
-    overlay: true,
+    useLocalIp: true,
     stats: "errors-only",
   },
   plugins: [
