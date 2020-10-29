@@ -9,7 +9,5 @@ if (process.env.NODE_ENV === "development") {
   require("./index.html");
   document.querySelector(".test").classList.remove("test");
 }
-if (process.env.TEST_ENV === "dev") {
-  document.querySelector(".test").classList.remove("test");
-}
+
 window.quillFn = { ...quillFn };

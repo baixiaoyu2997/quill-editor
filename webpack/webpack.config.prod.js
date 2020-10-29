@@ -2,6 +2,7 @@ const Webpack = require('webpack');
 const Path = require("path");
 const { merge } = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default;
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
@@ -43,4 +44,19 @@ module.exports = merge(common, {
       },
     ],
   },
+  optimization:{
+    minimizer:[
+      new CssMinimizerPlugin({
+        minimizerOptions: {
+          preset: [
+            'default',
+            {
+              discardComments: { removeAll: true },
+            },
+          ],
+        },
+      }),
+      // '...'
+    ]
+  }
 });
