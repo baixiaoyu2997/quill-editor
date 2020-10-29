@@ -9,10 +9,10 @@ p {
   position: "relative";
 }
 
-.quill-textLine.coin {
+.quill-textLink.coin {
   color: #007bff;
 }
 
-.quill-textLine.top {
+.quill-textLink.topic {
   color: #ffa033;
 }

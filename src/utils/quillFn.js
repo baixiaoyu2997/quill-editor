@@ -9,7 +9,7 @@ const readOnlyCss = `<style>${readOnlyStyle}</style>`;
 
 import "./test";
 const loadingImgs = {};
-const textLine = {};
+const textLink = {};
 
 const Delta = Quill.import("delta");
 
@@ -44,6 +44,7 @@ export const setImg = (id, code, src, event) => {
     const selectIndex = boltIndex + 2;
     const src = loadingSVG;
     const newBolt = () => quill.getLeaf(boltIndex === 0 ? 0 : boltIndex + 1)[0];
+    console.log('============加载中图片位置:'+boltIndex)
     addImg({ src, id, newBolt, code: 2, boltIndex, selectIndex });
 
     // 加载中就设置不能提交
@@ -163,17 +164,17 @@ export const onTextChange = (delta, oldDelta, source) => {
   // 编辑器值改变时判断是否能提交
   canSubmit();
 };
-export const setTextLine = (id, text, type) => {
+export const setTextLink = (id, text, type) => {
   quill.focus();
   let index = getFocus();
   // 超话和比特币只能各有一个
-  if (textLine[type]) {
-    const prevBlotIndex = quill.getIndex(textLine[type]);
+  if (textLink[type]) {
+    const prevBlotIndex = quill.getIndex(textLink[type]);
     quill.updateContents(new Delta().retain(prevBlotIndex).delete(1));
     index = index + (prevBlotIndex < index ? -1 : 0);
   }
-  quill.insertEmbed(index, "textLine", { id, text, type });
-  textLine[type] = quill.getLeaf(index + 1)[0];
+  quill.insertEmbed(index, "textLink", { id, text, type });
+  textLink[type] = quill.getLeaf(index + 1)[0];
   quill.insertText(index + 1, " ", Quill.sources.SILENT); // 修复safari浏览器光标错位的问题，https://github.com/quilljs/quill/issues/1181#issuecomment-292513275
   quill.setSelection(index + 1);
 };

@@ -15,7 +15,7 @@ export const getQueryVariable = (variable) => {
 // 用于后台进行区分的特殊格式
 export const formatSubmit = (delta) => {
   const obj = {
-    topId: "",
+    topicId: "",
     coinId: "",
   };
   obj.content = delta.map((x) => {

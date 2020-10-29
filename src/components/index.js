@@ -31,7 +31,7 @@ ImageBlot.className = "quill-img";
 ImageBlot.tagName = "div";
 
 // 标签组件
-class TextLine extends Embed {
+class TextLink extends Embed {
   static create(value) {
     let node = super.create(value);
     node.setAttribute("contenteditable", false);
@@ -52,15 +52,15 @@ class TextLine extends Embed {
     };
   }
 }
-TextLine.blotName = "textLine";
-TextLine.className = "quill-textLine";
-TextLine.tagName = "a";
-TextLine.top = {
+TextLink.blotName = "textLink";
+TextLink.className = "quill-textLink";
+TextLink.tagName = "a";
+TextLink.topic = {
   sign: "#",
 };
-TextLine.coin = {
+TextLink.coin = {
   sign: "$",
 };
 
 Quill.register(ImageBlot);
-Quill.register(TextLine);
+Quill.register(TextLink);
