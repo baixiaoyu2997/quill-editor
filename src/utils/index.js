@@ -38,8 +38,6 @@ export const resetFormat = (data) => {
       if (x.type === "text") {
         insert = x.content.text;
       } else {
-        console.log(x.type);
-        console.log(x.content);
         insert[x.type] = x.content;
       }
       return { insert };
