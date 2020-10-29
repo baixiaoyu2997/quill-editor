@@ -1,7 +1,6 @@
 const Webpack = require('webpack');
 const Path = require("path");
 const { merge } = require('webpack-merge');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default;
@@ -23,9 +22,6 @@ module.exports = merge(common, {
       'process.env.NODE_ENV': JSON.stringify('production'),
       'process.env.TEST_ENV': JSON.stringify(process.env.TEST_ENV),
     }),
-    new MiniCssExtractPlugin({
-      filename: 'bundle.css',
-    }),
     new HtmlWebpackPlugin({
       inlineSource: ".(js)$",
       template: Path.resolve(__dirname, "../src/index.html"),
@@ -39,10 +35,6 @@ module.exports = merge(common, {
         test: /\.js$/,
         exclude: /node_modules/,
         use: 'babel-loader',
-      },
-      {
-        test: /\.s?css/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
     ],
   },
