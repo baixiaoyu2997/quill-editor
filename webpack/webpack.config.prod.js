@@ -6,6 +6,8 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default;
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+
 const common = require('./webpack.common.js');
 module.exports = merge(common, {
   mode: 'production',
@@ -45,6 +47,7 @@ module.exports = merge(common, {
     ],
   },
   optimization:{
+    minimize: true,
     minimizer:[
       new CssMinimizerPlugin({
         minimizerOptions: {
@@ -56,7 +59,14 @@ module.exports = merge(common, {
           ],
         },
       }),
-      // '...'
+      new TerserPlugin({
+        terserOptions: {
+          format: {
+            comments: false,
+          },
+        },
+        extractComments: false,
+      }),
     ]
   }
 });

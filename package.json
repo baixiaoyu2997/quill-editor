@@ -6,7 +6,7 @@
     "lint": "npm run lint:styles; npm run lint:scripts",
     "lint:styles": "stylelint src",
     "lint:scripts": "eslint src",
-    "build": "cross-env NODE_ENV=production webpack --config webpack/webpack.config.prod.js --colors",
+    "build": "cross-env NODE_ENV=production webpack --config webpack/webpack.config.prod.js --color --profile --progress",
     "dev": "webpack serve --config webpack/webpack.config.dev.js"
   },
   "repository": {
@@ -52,6 +52,7 @@
     "stylelint": "^13.7.2",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-webpack-plugin": "^2.1.1",
+    "terser-webpack-plugin": "^5.0.3",
     "url-loader": "^4.1.1",
     "webpack": "^5.3.0",
     "webpack-cli": "^4.1.0",
