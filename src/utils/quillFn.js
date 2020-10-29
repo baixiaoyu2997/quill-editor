@@ -41,11 +41,9 @@ export const setImg = (id, code, src, event) => {
   if (code === 2) {
     quill.focus(); // 防止插入图片时没有index
     const boltIndex = getFocus();
-    const selectIndex = boltIndex + 2;
     const src = loadingSVG;
-    const newBolt = () => quill.getLeaf(boltIndex === 0 ? 0 : boltIndex + 1)[0];
-    console.log('============加载中图片位置:'+boltIndex)
-    addImg({ src, id, newBolt, code: 2, boltIndex, selectIndex });
+
+    addImg({ src, id, code, boltIndex });
 
     // 加载中就设置不能提交
     setGlobal("CAN_SUBMIT", false);
@@ -57,21 +55,16 @@ export const setImg = (id, code, src, event) => {
       return;
     }
     const boltIndex = quill.getIndex(loadingImgs[id].bolt);
-    console.log("=======加载中图片位置：" + boltIndex);
     const deleteOptions = {
       rLength: boltIndex,
       dLength: 1,
     };
-    const newBolt = () => {
-      return quill.getLeaf(getFocus() - 1)[0];
-    };
+ 
     addImg({
       src,
       id,
-      newBolt,
-      code: 1,
+      code,
       boltIndex,
-      selectIndex: boltIndex + 1,
       deleteOptions,
     });
   } else {
@@ -89,15 +82,7 @@ export const setImg = (id, code, src, event) => {
   }
 };
 // 添加图片
-const addImg = ({
-  id,
-  src,
-  boltIndex,
-  newBolt,
-  code,
-  selectIndex,
-  deleteOptions,
-}) => {
+const addImg = ({ id, src, boltIndex, code, deleteOptions }) => {
   // 不要对if else中的内容进行简写
   if (deleteOptions) {
     quill.updateContents(
@@ -108,13 +93,15 @@ const addImg = ({
       new Delta().retain(boltIndex).insert({ image: { src, id: id } })
     );
   }
+  
   loadingImgs[id] = {
-    bolt: newBolt(),
+    bolt: Quill.find(document.getElementById(id)),
     code,
   };
-  quill.setSelection(selectIndex);
+  const newBoltIndex = quill.getIndex(loadingImgs[id].bolt);
+  quill.setSelection(newBoltIndex + 1);
   window.scrollTo({
-    top: quill.getBounds(selectIndex).top,
+    top: quill.getBounds(newBoltIndex + 1).top,
   });
 };
 // 删除图片
