@@ -55,45 +55,31 @@ export const setImg = (id, code, src, event) => {
       return;
     }
     const boltIndex = quill.getIndex(loadingImgs[id].bolt);
-    const deleteOptions = {
-      rLength: boltIndex,
-      dLength: 1,
-    };
- 
+    deleteImg({ id, rLength: boltIndex });
     addImg({
       src,
       id,
       code,
       boltIndex,
-      deleteOptions,
     });
   } else {
     const newId = event ? event.target.id : id;
     const boltIndex = quill.getIndex(loadingImgs[newId].bolt);
     const rLength = boltIndex - 1;
-    quill.updateContents(
-      deleteImg({
-        id: newId,
-        rLength,
-        dLength: boltIndex === 0 ? 1 : 2,
-        event,
-      })
-    );
+    deleteImg({
+      id: newId,
+      rLength,
+      dLength: boltIndex === 0 ? 1 : 2,
+      event,
+    });
   }
 };
 // 添加图片
-const addImg = ({ id, src, boltIndex, code, deleteOptions }) => {
-  // 不要对if else中的内容进行简写
-  if (deleteOptions) {
-    quill.updateContents(
-      deleteImg({ id, ...deleteOptions }).insert({ image: { src, id: id } })
-    );
-  } else {
-    quill.updateContents(
-      new Delta().retain(boltIndex).insert({ image: { src, id: id } })
-    );
-  }
-  
+const addImg = ({ id, src, boltIndex, code }) => {
+  quill.updateContents(
+    new Delta().retain(boltIndex).insert({ image: { src, id: id } })
+  );
+
   loadingImgs[id] = {
     bolt: Quill.find(document.getElementById(id)),
     code,
@@ -105,9 +91,9 @@ const addImg = ({ id, src, boltIndex, code, deleteOptions }) => {
   });
 };
 // 删除图片
-const deleteImg = ({ id, dLength, rLength, event }) => {
+const deleteImg = ({ id, dLength = 1, rLength, event }) => {
   if (event) loadingImgs[id].code = 0;
-  return new Delta().retain(rLength).delete(dLength);
+  quill.updateContents(new Delta().retain(rLength).delete(dLength));
 };
 // 显示标题输入框
 export const showTitle = (bool) => {
