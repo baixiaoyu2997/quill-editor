@@ -1,5 +1,10 @@
-p {
+* {
   font-size: 4vw;
+}
+
+html,
+body {
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .quill-img img {

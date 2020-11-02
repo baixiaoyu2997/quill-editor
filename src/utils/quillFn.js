@@ -6,7 +6,6 @@ import { globals, setGlobal } from "../global";
 import { formatSubmit, resetFormat } from "./index";
 import readOnlyStyle from "!!raw-loader!../assets/css/readOnly.css";
 const readOnlyCss = `<style>${readOnlyStyle}</style>`;
-
 import "./test";
 const loadingImgs = {};
 const textLink = {};
@@ -22,10 +21,11 @@ const initQuillValue = quill.getContents();
 // 提交
 export const getContents = () => {
   const commitObj = formatSubmit(quill.getContents());
+  const reg = /http(s)?:\/\/(.*?)\//g;
 
   const contents = {
     title: globals.SHOW_TITLE ? titleEl.value : "",
-    html: readOnlyCss + quill.root.innerHTML,
+    html: readOnlyCss + quill.root.innerHTML.replaceAll(reg, "/"),
     canSubmit: globals.CAN_SUBMIT,
     ...commitObj,
   };
@@ -132,6 +132,10 @@ export const onTextChange = (delta, oldDelta, source) => {
   newDelta.diff(oldDelta).forEach((x) => {
     if (x.insert && x.insert.image) {
       loadingImgs[x.insert.image.id].code = 0;
+    }
+    // 手动删除时去除textLink对象内数据
+    if(x.insert&&x.insert.textLink){
+      delete textLink[x.insert.textLink.type]
     }
   });
   // 编辑器值改变时判断是否能提交

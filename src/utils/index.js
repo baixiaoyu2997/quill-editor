@@ -26,6 +26,12 @@ export const formatSubmit = (delta) => {
     if (obj[`${content.type}Id`] === "") {
       obj[`${content.type}Id`] = content.id;
     }
+    if (objKey === "image") {
+      const reg = /^http(s)?:\/\/(.*?)\//;
+      // 传给后端数据去除host
+      content.src = content.src.replace(reg, "/");
+    }
+
     return { type: isText ? "text" : objKey, content };
   });
   return obj;
