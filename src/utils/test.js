@@ -22,13 +22,6 @@ export const setContents = () => {
 export const setFontSize = () => {
   quill.format("size", "huge");
 };
-export const onSelectChange = (range, oldDelta, source) => {
-  if (source == "api") {
-    console.log("===============API");
-  } else if (source == "user") {
-    console.log("===============User");
-  }
-};
 
 export const setSelection = () => {
   quill.setSelection(Math.floor(Math.random() * 10));

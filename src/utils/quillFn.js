@@ -7,7 +7,7 @@ import { formatSubmit, resetFormat } from "./index";
 import "./test";
 const loadingImgs = {};
 const textLink = {};
-
+let currentTop = 0;
 const Delta = Quill.import("delta");
 
 const quill = new Quill("#editor", {
@@ -22,11 +22,13 @@ export const getContents = () => {
   let html = quill.root.innerHTML;
   const reg = /http(s)?:\/\/(.*?)\//;
   // 去除图片链接中的host
-  Object.keys(loadingImgs).filter((x) => loadingImgs[x].code === 1).forEach((x) => {
-    const imgHTML = loadingImgs[x].bolt.domNode.innerHTML;
-    const newImgHTML = imgHTML.replace(reg, "/");
-    html = html.replace(String(imgHTML), newImgHTML);
-  });
+  Object.keys(loadingImgs)
+    .filter((x) => loadingImgs[x].code === 1)
+    .forEach((x) => {
+      const imgHTML = loadingImgs[x].bolt.domNode.innerHTML;
+      const newImgHTML = imgHTML.replace(reg, "/");
+      html = html.replace(String(imgHTML), newImgHTML);
+    });
   const contents = {
     title: globals.SHOW_TITLE ? titleEl.value : "",
     html,
@@ -159,4 +161,15 @@ export const setTextLink = (id, text, type) => {
   quill.insertText(index + 1, " ", Quill.sources.SILENT); // 修复safari浏览器光标错位的问题，https://github.com/quilljs/quill/issues/1181#issuecomment-292513275
   quill.setSelection(index + 1);
 };
+export const resetViewport = () => {
+  quill.focus();
+  window.scrollTo({
+    top: currentTop,
+  });
+};
+const onSelectChange = (range, oldRange, source) => {
+  // 失去焦点时，记录位置
+  if (range === null) currentTop = quill.getBounds(oldRange.index).top;
+};
 quill.on("text-change", onTextChange);
+quill.on("selection-change", onSelectChange);
