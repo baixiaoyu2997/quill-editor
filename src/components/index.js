@@ -38,6 +38,12 @@ class TextLink extends Embed {
     node.setAttribute("type", value.type);
     node.setAttribute("text", value.text);
     node.setAttribute("id", value.id);
+    node.setAttribute("href", `${this[value.type].href+value.id}`);
+    // 编辑时，禁止a标签跳转
+    node.addEventListener('click', function(ev) {
+      ev.preventDefault();
+    }, false);
+
     node.innerHTML = `${
       this[value.type].sign + value.text + this[value.type].sign
     }`;
@@ -57,9 +63,11 @@ TextLink.className = "quill-textLink";
 TextLink.tagName = "a";
 TextLink.topic = {
   sign: "#",
+  href:"https://niuyan.com/topic/"
 };
 TextLink.coin = {
   sign: "$",
+  href:"https://niuyan.com/currencies/"
 };
 
 Quill.register(ImageBlot);

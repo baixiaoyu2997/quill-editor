@@ -4,8 +4,6 @@ import loadingSVG from "../assets/loading.svg";
 import { titleEl, titleWrapEl } from "../components/title";
 import { globals, setGlobal } from "../global";
 import { formatSubmit, resetFormat } from "./index";
-import readOnlyStyle from "!!raw-loader!../assets/css/readOnly.css";
-const readOnlyCss = `<style>${readOnlyStyle}</style>`;
 import "./test";
 const loadingImgs = {};
 const textLink = {};
@@ -21,11 +19,17 @@ const initQuillValue = quill.getContents();
 // 提交
 export const getContents = () => {
   const commitObj = formatSubmit(quill.getContents());
-  const reg = /http(s)?:\/\/(.*?)\//g;
-
+  let html = quill.root.innerHTML;
+  const reg = /http(s)?:\/\/(.*?)\//;
+  // 去除图片链接中的host
+  Object.keys(loadingImgs).filter((x) => loadingImgs[x].code === 1).forEach((x) => {
+    const imgHTML = loadingImgs[x].bolt.domNode.innerHTML;
+    const newImgHTML = imgHTML.replace(reg, "/");
+    html = html.replace(String(imgHTML), newImgHTML);
+  });
   const contents = {
     title: globals.SHOW_TITLE ? titleEl.value : "",
-    html: readOnlyCss + quill.root.innerHTML.replaceAll(reg, "/"),
+    html,
     canSubmit: globals.CAN_SUBMIT,
     ...commitObj,
   };
@@ -134,8 +138,8 @@ export const onTextChange = (delta, oldDelta, source) => {
       loadingImgs[x.insert.image.id].code = 0;
     }
     // 手动删除时去除textLink对象内数据
-    if(x.insert&&x.insert.textLink){
-      delete textLink[x.insert.textLink.type]
+    if (x.insert && x.insert.textLink) {
+      delete textLink[x.insert.textLink.type];
     }
   });
   // 编辑器值改变时判断是否能提交

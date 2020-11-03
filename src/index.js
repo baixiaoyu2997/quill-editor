@@ -12,4 +12,7 @@ if (process.env.NODE_ENV === "development") {
 if (process.env.TEST_ENV === "dev") {
   document.querySelector(".test").classList.remove("test");
 }
+if (module.hot) {
+  module.hot.accept();
+}
 window.quillFn = { ...quillFn };
