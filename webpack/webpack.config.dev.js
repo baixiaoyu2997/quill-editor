@@ -7,7 +7,8 @@ const common = require("./webpack.common.js");
 
 module.exports = merge(common, {
   mode: "development",
-  devtool: "eval-cheap-source-map",
+  target:'web',
+  devtool: "eval-cheap-module-source-map",
   output: {
     chunkFilename: "js/[name].chunk.js",
   },
@@ -46,6 +47,14 @@ module.exports = merge(common, {
         test: /\.js$/,
         include: Path.resolve(__dirname, "../src"),
         loader: "babel-loader",
+      },
+      {
+        test: /\.s?css/i,
+        use: [
+          "style-loader",
+          "css-loader",
+          "postcss-loader",
+        ],
       },
     ],
   },

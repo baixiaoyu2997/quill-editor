@@ -93,6 +93,10 @@ body {
   z-index: 1;
 }
 
+#editor .ql-editor .quill-img img {
+  position: relative;
+}
+
 #editor .ql-editor.ql-blank::before {
   font-family: PingFang SC, sans-serif;
   font-style: normal;

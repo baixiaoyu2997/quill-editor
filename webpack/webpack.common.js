@@ -2,10 +2,8 @@ const Path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  target: 'web',
   output: {
     path: Path.join(__dirname, "../dist"),
     publicPath: "/",
@@ -15,7 +13,6 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [{ from: Path.resolve(__dirname, "../public"), to: "public" }],
     }),
-    new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: Path.resolve(__dirname, "../src/index.html"),
     }),
@@ -37,16 +34,6 @@ module.exports = {
         use: {
           loader: "url-loader",
         },
-      },
-      {
-        test: /\.s?css/i,
-        use: [
-          process.env.NODE_ENV == "development"
-            ? { loader: "style-loader" }
-            : MiniCssExtractPlugin.loader,
-          "css-loader",
-          "postcss-loader",
-        ],
       },
     ],
   },
