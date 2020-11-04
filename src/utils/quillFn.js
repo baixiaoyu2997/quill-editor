@@ -7,7 +7,6 @@ import { formatSubmit, resetFormat } from "./index";
 import "./test";
 const loadingImgs = {};
 const textLink = {};
-let currentTop = 0;
 const Delta = Quill.import("delta");
 
 const quill = new Quill("#editor", {
@@ -37,15 +36,13 @@ export const getContents = () => {
   };
   return contents;
 };
-// 获取光标位置,必须在编辑器有焦点的情况下才能执行
-export const getFocus = () => {
-  // console.log(quill.getSelection().index);
-  return quill.getSelection().index;
+export const getFocus = (bool = true) => {
+  // 设置参数true，编辑器会先获取焦点
+  return quill.getSelection(bool).index;
 };
 export const setImg = (id, code, src, event) => {
   // code 0：加载失败 1：加载成功 2:加载中
   if (code === 2) {
-    quill.focus(); // 防止插入图片时没有index
     const boltIndex = getFocus();
     const src = loadingSVG;
 
@@ -92,9 +89,7 @@ const addImg = ({ id, src, boltIndex, code }) => {
   };
   const newBoltIndex = quill.getIndex(loadingImgs[id].bolt);
   quill.setSelection(newBoltIndex + 1);
-  window.scrollTo({
-    top: quill.getBounds(newBoltIndex + 1).top,
-  });
+  scrollToFocus();
 };
 // 删除图片
 const deleteImg = ({ id, dLength = 1, rLength, event }) => {
@@ -148,7 +143,6 @@ export const onTextChange = (delta, oldDelta, source) => {
   canSubmit();
 };
 export const setTextLink = (id, text, type) => {
-  quill.focus();
   let index = getFocus();
   // 超话和比特币只能各有一个
   if (textLink[type]) {
@@ -161,15 +155,11 @@ export const setTextLink = (id, text, type) => {
   quill.insertText(index + 1, " ", Quill.sources.SILENT); // 修复safari浏览器光标错位的问题，https://github.com/quilljs/quill/issues/1181#issuecomment-292513275
   quill.setSelection(index + 1);
 };
-export const resetViewport = () => {
-  quill.focus();
+// 滚动视图到指定位置
+export const scrollToFocus = (index = getFocus()) => {
   window.scrollTo({
-    top: currentTop,
+    top: quill.getBounds(index).top,
   });
 };
-const onSelectChange = (range, oldRange, source) => {
-  // 失去焦点时，记录位置
-  if (range === null) currentTop = quill.getBounds(oldRange.index).top;
-};
+
 quill.on("text-change", onTextChange);
-quill.on("selection-change", onSelectChange);
