@@ -61,6 +61,12 @@ body {
   padding: 12px 16px;
 }
 
+#editor .ql-editor p,
+#editor .ql-editor span {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
 #editor .ql-editor .quill-img {
   position: relative;
   overflow: hidden;
@@ -98,10 +104,11 @@ body {
 }
 
 #editor .ql-editor.ql-blank::before {
+  font-size: 16px;
+  line-height: 1.5;
   font-family: PingFang SC, sans-serif;
   font-style: normal;
   font-weight: normal;
-  font-size: 18px;
 }
 
 #scrolling-container .hide {

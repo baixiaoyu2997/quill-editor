@@ -1,12 +1,3 @@
-* {
-  font-size: 18px;
-  color: #303030;
-}
-
-a {
-  text-decoration: none;
-}
-
 html,
 body {
   background-color: rgba(0, 0, 0, 0);
@@ -14,14 +5,24 @@ body {
   padding: 0;
 }
 
-p {
+a {
+  text-decoration: none;
+}
+
+p,
+span {
+  font-size: 18px;
   font-family: PingFang SC, sans-serif;
   font-style: normal;
   font-weight: normal;
+  color: #303030;
+  line-height: 1.55;
+}
+
+p {
   margin-block-start: 0;
   margin-block-end: 0;
   margin-bottom: 16px !important;
-  line-height: 1.55;
 }
 
 :not(p) + p {
