@@ -1,3 +1,5 @@
+const dsBridge = require('dsbridge')
+
 export const globals = {
   SHOW_TITLE: false,
   CAN_SUBMIT: false,
@@ -5,4 +7,7 @@ export const globals = {
 }
 export const setGlobal = (name, value) => {
   globals[name] = value
+  if (name === 'CAN_SUBMIT' && value !== globals.CAN_SUBMIT) {
+    dsBridge.call('canSubmit', value)
+  }
 }

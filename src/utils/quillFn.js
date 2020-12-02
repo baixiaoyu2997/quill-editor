@@ -30,7 +30,6 @@ export const getContents = () => {
   const contents = {
     title: globals.SHOW_TITLE ? titleEl.value : '',
     html,
-    canSubmit: globals.CAN_SUBMIT,
     ...commitObj
   }
   return contents
@@ -52,7 +51,7 @@ export const setImg = (id, code, src, event) => {
   } else if (code === 1) {
     quill.focus()
     // 如果已经删除了那么不进行之后的操作
-    if (loadingImgs[id].code === 0) {
+    if (loadingImgs[id].code === 0 && titleEl.value.trim() !== '') {
       setGlobal('CAN_SUBMIT', true)
       return
     }
@@ -112,7 +111,7 @@ export const canSubmit = () => {
   let flag = false
 
   // 如果有图片在加载中，始终不能提交
-  if (Object.values(loadingImgs).some(x => x.load === 1)) {
+  if (Object.values(loadingImgs).some(x => x.code === 2)) {
     return flag
   }
   const content = quill.getContents()
@@ -131,10 +130,7 @@ export const canSubmit = () => {
   ) {
     flag = true
   }
-  if (globals.CAN_SUBMIT !== flag) {
-    // CAN_SUBMIT懒修改
-    setGlobal('CAN_SUBMIT', flag)
-  }
+  setGlobal('CAN_SUBMIT', flag)
   return flag
 }
 export const onTextChange = (delta, oldDelta, source) => {
