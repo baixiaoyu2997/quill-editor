@@ -18,14 +18,13 @@ body {
 #scrolling-container .titleInput {
   flex-shrink: 0;
   margin: 0 15px;
-  border-bottom: 1px solid rgb(242, 242, 242);
   padding: 16px 0;
   min-height: 64px;
   box-sizing: border-box;
   font-size: 18px;
 }
 
-#scrolling-container .titleInput textarea {
+#title {
   width: 100%;
   padding: 0;
   margin: 0;
@@ -36,13 +35,17 @@ body {
   font-size: 18px;
   font-weight: 600;
   resize: none;
-  color: #303030;
   position: relative;
   top: 50%;
   transform: translateY(-50%);
 }
 
-#scrolling-container .titleInput textarea:focus {
+#title,
+#editor .ql-editor {
+  caret-color: #0a6afa;
+}
+
+#title:focus {
   outline: 0;
 }
 
@@ -73,7 +76,6 @@ body {
   content: "";
   top: 0;
   right: 0;
-  background: url(~/assets/close.svg);
   background-size: cover;
   height: 40px;
   width: 40px;
@@ -88,8 +90,6 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: black;
-  opacity: 0.6;
   z-index: 1;
 }
 
@@ -102,7 +102,6 @@ body {
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
-  color: #adadad;
 }
 
 #scrolling-container .hide {

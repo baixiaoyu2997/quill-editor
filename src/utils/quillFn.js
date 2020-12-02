@@ -10,7 +10,7 @@ const Delta = Quill.import('delta')
 
 const quill = new Quill('#editor', {
   scrollingContainer: 'scrolling-container',
-  placeholder: '请输入正文'
+  placeholder: '向大家说说你的看法'
 })
 
 const initQuillValue = quill.getContents()
@@ -99,8 +99,10 @@ const deleteImg = ({ id, dLength = 1, rLength, event }) => {
 export const showTitle = bool => {
   setGlobal('SHOW_TITLE', bool)
   if (bool) {
+    quill.root.dataset.placeholder = '请输入正文'
     titleWrapEl.classList.remove('hide')
   } else {
+    quill.root.dataset.placeholder = '向大家说说你的看法'
     titleWrapEl.classList.add('hide')
   }
   canSubmit()
@@ -122,7 +124,11 @@ export const canSubmit = () => {
   )
   if (!globals.SHOW_TITLE) {
     flag = hasContentChange && hasContentText
-  } else if (titleEl.value.trim() !== '' && hasContentChange && hasContentText) {
+  } else if (
+    titleEl.value.trim() !== '' &&
+    hasContentChange &&
+    hasContentText
+  ) {
     flag = true
   }
   if (globals.CAN_SUBMIT !== flag) {

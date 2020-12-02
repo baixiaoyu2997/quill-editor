@@ -1,0 +1,25 @@
+#scrolling-container .titleInput {
+  border-bottom: 1px solid #000;
+}
+
+#title {
+  color: #e6e6e6;
+  background-color: transparent;
+}
+
+#title::placeholder {
+  color: #6e6e6e;
+}
+
+#editor .ql-editor .quill-img:focus::after {
+  background-image: url(~/assets/close-dark.svg);
+}
+
+#editor .ql-editor .quill-img:focus::before {
+  background-color: white;
+  opacity: 0.6;
+}
+
+#editor .ql-editor.ql-blank::before {
+  color: #6e6e6e;
+}
