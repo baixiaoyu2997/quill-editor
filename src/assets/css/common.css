@@ -17,7 +17,7 @@ body {
 
 #scrolling-container .titleInput {
   display: flex;
-  justify-content: center;
+  align-items: center;
   flex-shrink: 0;
   margin: 0 15px;
   padding: 4px 0;
