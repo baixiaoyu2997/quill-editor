@@ -6,8 +6,8 @@ export const globals = {
   THEME: 'light'
 }
 export const setGlobal = (name, value) => {
-  globals[name] = value
   if (name === 'CAN_SUBMIT' && value !== globals.CAN_SUBMIT) {
     dsBridge.call('canSubmit', value)
   }
+  globals[name] = value
 }

@@ -51,7 +51,10 @@ export const setImg = (id, code, src, event) => {
   } else if (code === 1) {
     quill.focus()
     // 如果已经删除了那么不进行之后的操作
-    if (loadingImgs[id].code === 0 && titleEl.value.trim() !== '') {
+    if (
+      loadingImgs[id].code === 0 &&
+      !(globals.SHOW_TITLE && titleEl.value.trim() === '')
+    ) {
       setGlobal('CAN_SUBMIT', true)
       return
     }
