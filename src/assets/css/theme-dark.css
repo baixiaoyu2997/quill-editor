@@ -1,3 +1,7 @@
+#scrolling-container {
+  background-color: #141414;
+}
+
 #scrolling-container .titleInput {
   border-bottom: 1px solid #000;
 }
