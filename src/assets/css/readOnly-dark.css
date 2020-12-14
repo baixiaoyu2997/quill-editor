@@ -29,6 +29,10 @@ p {
   margin-top: 16px !important;
 }
 
+p:last-of-type {
+  margin-bottom: 0 !important;
+}
+
 .quill-img img {
   width: 100%;
   height: auto;
