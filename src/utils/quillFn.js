@@ -1,7 +1,7 @@
 import Quill from 'quill'
 import loadingSVG from '../assets/loading.svg'
 import { titleEl, titleWrapEl } from '../components/title'
-import { globals, setGlobal } from '../global'
+import { globals, setGlobal, lang } from '../global'
 import { formatSubmit } from './index'
 import './test'
 const loadingImgs = {}
@@ -10,7 +10,7 @@ const Delta = Quill.import('delta')
 
 const quill = new Quill('#editor', {
   scrollingContainer: 'scrolling-container',
-  placeholder: '向大家说说你的看法'
+  placeholder: lang[globals.LANG].shortPlaceholder
 })
 
 const initQuillValue = quill.getContents()
@@ -100,11 +100,11 @@ const deleteImg = ({ id, dLength = 1, rLength, event }) => {
 // 显示标题输入框
 export const showTitle = bool => {
   setGlobal('SHOW_TITLE', bool)
+  changeLanguage()
+
   if (bool) {
-    quill.root.dataset.placeholder = '请输入正文'
     titleWrapEl.classList.remove('hide')
   } else {
-    quill.root.dataset.placeholder = '向大家说说你的看法'
     titleWrapEl.classList.add('hide')
   }
   canSubmit()
@@ -169,6 +169,20 @@ export const scrollToFocus = (index = getFocus()) => {
   window.scrollTo({
     top: quill.getBounds(index).top
   })
+}
+export const setLang = lang => {
+  setGlobal('LANG', lang)
+  changeLanguage()
+}
+const changeLanguage = () => {
+  if (globals.SHOW_TITLE) {
+    document
+      .getElementById('title')
+      .setAttribute('placeholder', lang[globals.LANG].titlePlaceholder)
+    quill.root.dataset.placeholder = lang[globals.LANG].longPlaceholder
+  } else {
+    quill.root.dataset.placeholder = lang[globals.LANG].shortPlaceholder
+  }
 }
 
 quill.on('text-change', onTextChange)

@@ -3,7 +3,8 @@ import {
   getContents,
   showTitle,
   setTextLink,
-  scrollToFocus
+  scrollToFocus,
+  setLang
 } from './quillFn'
 const dsBridge = require('dsbridge')
 dsBridge.register('insertImage', setImg) // id, code, url
@@ -12,3 +13,4 @@ dsBridge.register('showTitle', showTitle) // 显示隐藏title，参数：boolea
 dsBridge.register('insertTopic', (id, name) => setTextLink(id, name, 'topic')) // 插入超话
 dsBridge.register('insertCoin', (id, name) => setTextLink(id, name, 'coin')) // 插入比特币
 dsBridge.register('scrollToFocus', scrollToFocus)
+dsBridge.register('setLang', setLang) // zh,en
