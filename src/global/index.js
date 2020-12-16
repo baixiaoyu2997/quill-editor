@@ -20,7 +20,7 @@ export const globals = {
 }
 export const setGlobal = (name, value) => {
   if (name === 'CAN_SUBMIT' && value !== globals.CAN_SUBMIT) {
-    dsBridge.call('canSubmit')
+    dsBridge.call('canSubmit', value)
   }
   globals[name] = value
 }
