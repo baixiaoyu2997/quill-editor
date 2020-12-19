@@ -12,8 +12,8 @@ export const formatSubmit = delta => {
     const objKey = Object.keys(x.insert)[0]
     const content = isText ? { text: x.insert } : x.insert[objKey]
 
-    if (obj[`${content.type}Id`] === '') {
-      obj[`${content.type}Id`] = content.id
+    if (obj[`${content['data-type']}Id`] === '') {
+      obj[`${content['data-type']}Id`] = content['data-id']
     }
     if (objKey === 'image') {
       const reg = /^http(s)?:\/\/(.*?)\//
@@ -21,21 +21,23 @@ export const formatSubmit = delta => {
       content.src = content.src.replace(reg, '/')
     }
 
-    return { type: isText ? 'text' : objKey, content }
+    if (isText) {
+      return { type: 'text', content }
+    } else {
+      // 去除data-*
+      const deleteDataProps = content => {
+        // eslint-disable-next-line prefer-const
+        let newContent = {}
+        Object.keys(content).forEach(
+          key =>
+            (newContent[
+              key.startsWith('data-') ? key.replace('data-', '') : key
+            ] = content[key])
+        )
+        return newContent
+      }
+      return { type: objKey, content: deleteDataProps(content) }
+    }
   })
   return obj
-}
-// 还原后台传输数据为Delta格式
-export const resetFormat = data => {
-  return new Delta(
-    data.map(x => {
-      let insert = {}
-      if (x.type === 'text') {
-        insert = x.content.text
-      } else {
-        insert[x.type] = x.content
-      }
-      return { insert }
-    })
-  )
 }

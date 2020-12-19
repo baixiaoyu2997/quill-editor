@@ -14,6 +14,29 @@ const quill = new Quill('#editor', {
 })
 
 const initQuillValue = quill.getContents()
+
+export const initHtmlValue = html => {
+  const delta = quill.clipboard.convert(html)
+  quill.setContents(delta)
+}
+
+export const initTextLink = (topicId, coinId) => {
+  if (topicId) textLink.topic = findBoltByDataId(topicId)
+  if (coinId) textLink.coin = findBoltByDataId(coinId)
+}
+
+// TODO : 不确定是否需要前端处理
+// export const initImg = () => {
+//   document.querySelectorAll('.quill-img').forEach(x => {
+//     const img = x.querySelector('img')
+//     img.src = imgServer + img.src
+//     loadingImgs[x.dataset.id] = {
+//       code: 1,
+//       bolt: findBoltByDataId(x.dataset.id)
+//     }
+//   })
+// }
+
 // 提交
 export const getContents = () => {
   const commitObj = formatSubmit(quill.getContents())
@@ -67,7 +90,7 @@ export const setImg = (id, code, src, event) => {
       boltIndex
     })
   } else {
-    const newId = event ? event.target.id : id
+    const newId = event ? event.target.dataset.id : id
     const boltIndex = quill.getIndex(loadingImgs[newId].bolt)
     const rLength = boltIndex - 1
     deleteImg({
@@ -81,11 +104,11 @@ export const setImg = (id, code, src, event) => {
 // 添加图片
 const addImg = ({ id, src, boltIndex, code }) => {
   quill.updateContents(
-    new Delta().retain(boltIndex).insert({ image: { src, id: id } })
+    new Delta().retain(boltIndex).insert({ image: { src, 'data-id': id } })
   )
 
   loadingImgs[id] = {
-    bolt: Quill.find(document.getElementById(id)),
+    bolt: findBoltByDataId(id),
     code
   }
   const newBoltIndex = quill.getIndex(loadingImgs[id].bolt)
@@ -138,14 +161,27 @@ export const canSubmit = () => {
 }
 export const onTextChange = (delta, oldDelta, source) => {
   const newDelta = quill.getContents()
+  const oldDeltaImgIdList = oldDelta
+    .map(x => {
+      if (x.insert && x.insert.image) {
+        return x.insert.image['data-id']
+      }
+      return undefined
+    })
+    .filter(x => x)
+
   // 手动删除时去除loadingImgs内数据
   newDelta.diff(oldDelta).forEach(x => {
-    if (x.insert && x.insert.image) {
-      loadingImgs[x.insert.image.id].code = 0
+    if (
+      x.insert &&
+      x.insert.image &&
+      !oldDeltaImgIdList.includes(x.insert.image?.['data-id'])
+    ) {
+      loadingImgs[x.insert.image['data-id']].code = 0
     }
     // 手动删除时去除textLink对象内数据
     if (x.insert && x.insert.textLink) {
-      delete textLink[x.insert.textLink.type]
+      delete textLink[x.insert.textLink['data-type']]
     }
   })
   // 编辑器值改变时判断是否能提交
@@ -159,7 +195,11 @@ export const setTextLink = (id, text, type) => {
     quill.updateContents(new Delta().retain(prevBlotIndex).delete(1))
     index = index + (prevBlotIndex < index ? -1 : 0)
   }
-  quill.insertEmbed(index, 'textLink', { id, text, type })
+  quill.insertEmbed(index, 'textLink', {
+    'data-id': id,
+    'data-text': text,
+    'data-type': type
+  })
   textLink[type] = quill.getLeaf(index + 1)[0]
   quill.insertText(index + 1, ' ', Quill.sources.SILENT) // 修复safari浏览器光标错位的问题，https://github.com/quilljs/quill/issues/1181#issuecomment-292513275
   quill.setSelection(index + 1)
@@ -184,5 +224,8 @@ const changeLanguage = () => {
     quill.root.dataset.placeholder = lang[globals.LANG].shortPlaceholder
   }
 }
+
+const findBoltByDataId = id =>
+  Quill.find(document.querySelector(`[data-id="${id}"]`))
 
 quill.on('text-change', onTextChange)

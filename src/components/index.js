@@ -8,20 +8,20 @@ class ImageBlot extends BlockEmbed {
   static create (value) {
     const node = super.create()
     node.setAttribute('contenteditable', false)
-    node.setAttribute('id', value.id)
+    node.setAttribute('data-id', value?.['data-id'])
     node.setAttribute('tabindex', -1)
     node.addEventListener('click', e => {
       setImg(null, null, null, e)
     }) // 只有点击删除的时候触发
     const img = document.createElement('img')
-    img.setAttribute('src', value.src)
+    img.setAttribute('src', value?.src)
     node.appendChild(img)
     return node
   }
 
   static value (node) {
     return {
-      id: node.getAttribute('id'),
+      'data-id': node.getAttribute('data-id'),
       src: node.firstChild.getAttribute('src')
     }
   }
@@ -35,31 +35,34 @@ class TextLink extends Embed {
   static create (value) {
     const node = super.create(value)
     node.setAttribute('contenteditable', false)
-    node.setAttribute('type', value.type)
-    node.setAttribute('text', value.text)
-    node.setAttribute('id', value.id)
-    node.setAttribute('href', `${this[value.type].href + value.id}`)
+    node.setAttribute('data-type', value?.['data-type'])
+    node.setAttribute('data-text', value?.['data-text'])
+    node.setAttribute('data-id', value?.['data-id'])
+    node.setAttribute(
+      'href',
+      `${this[value?.['data-type']]?.href + value?.['data-id']}`
+    )
     // 编辑时，禁止a标签跳转
     node.addEventListener(
       'click',
-      function (ev) {
-        ev.preventDefault()
+      function (e) {
+        e.preventDefault()
       },
       false
     )
 
-    node.innerHTML = `${this[value.type].sign +
-      value.text +
-      this[value.type].sign}`
-    node.classList.add(value.type)
+    node.innerHTML = `${this[value?.['data-type']].sign +
+      value?.['data-text'] +
+      this[value?.['data-type']]?.sign}`
+    node.classList.add(value?.['data-type'])
     return node
   }
 
   static value (node) {
     return {
-      id: node.getAttribute('id'),
-      text: node.getAttribute('text'),
-      type: node.getAttribute('type')
+      'data-id': node.getAttribute('data-id'),
+      'data-text': node.getAttribute('data-text'),
+      'data-type': node.getAttribute('data-type')
     }
   }
 }
