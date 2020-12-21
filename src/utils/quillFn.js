@@ -161,21 +161,13 @@ export const canSubmit = () => {
 }
 export const onTextChange = (delta, oldDelta, source) => {
   const newDelta = quill.getContents()
-  const oldDeltaImgIdList = oldDelta
-    .map(x => {
-      if (x.insert && x.insert.image) {
-        return x.insert.image['data-id']
-      }
-      return undefined
-    })
-    .filter(x => x)
 
   // 手动删除时去除loadingImgs内数据
   newDelta.diff(oldDelta).forEach(x => {
     if (
       x.insert &&
       x.insert.image &&
-      !oldDeltaImgIdList.includes(x.insert.image?.['data-id'])
+      loadingImgs[x.insert.image?.['data-id']].code !== 1
     ) {
       loadingImgs[x.insert.image['data-id']].code = 0
     }
