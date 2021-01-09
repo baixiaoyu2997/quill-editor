@@ -221,3 +221,20 @@ const findBoltByDataId = id =>
   Quill.find(document.querySelector(`[data-id="${id}"]`))
 
 quill.on('text-change', onTextChange)
+
+// 添加匹配器，支持在粘贴的时候过滤掉style属性,过滤掉外部图片
+quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
+  const ops = []
+  delta.ops.forEach(op => {
+    if (Array.from(node.classList).includes('quill-img')) {
+      const src = node.querySelector('img').src
+      ops.push({ insert: { image: { ...op.insert.image, src } } })
+    } else if (!op?.insert?.image) {
+      ops.push({
+        insert: op.insert
+      })
+    }
+  })
+  delta.ops = ops
+  return delta
+})
