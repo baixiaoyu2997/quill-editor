@@ -1,17 +1,17 @@
 /* 修改此文件需要同步替换light、分享页项目样式、cms帖子举报-举报内容样式 */
-html,
-body {
+html.dark-mode,
+.dark-mode body {
   background-color: rgba(0, 0, 0, 0);
   margin: 0;
   padding: 0;
 }
 
-a {
+.dark-mode a {
   text-decoration: none;
 }
 
-p,
-span {
+.dark-mode p,
+.dark-mode span {
   font-size: 18px;
   line-height: 1.55;
   font-family: PingFang SC, sans-serif;
@@ -20,30 +20,30 @@ span {
   color: #e6e6e6;
 }
 
-p {
+.dark-mode p {
   margin-block-start: 0;
   margin-block-end: 0;
   margin-bottom: 16px !important;
 }
 
-:not(p) + p {
+.dark-mode :not(p) + p {
   margin-top: 16px !important;
 }
 
-p:last-of-type {
+.dark-mode p:last-of-type {
   margin-bottom: 0 !important;
 }
 
-.quill-img img {
+.dark-mode .quill-img img {
   width: 100%;
   height: auto;
   display: block;
 }
 
-.quill-textLink.coin span {
+.dark-mode .quill-textLink.coin span {
   color: #007bff !important;
 }
 
-.quill-textLink.topic span {
+.dark-mode .quill-textLink.topic span {
   color: #ffa033 !important;
 }

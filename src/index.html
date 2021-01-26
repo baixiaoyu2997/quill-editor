@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 </head>
 
 <body>
@@ -14,6 +16,7 @@
     <div id="editor"></div>
     <div class="test flot">
       <button onclick="console.log(quillFn.getContents())">提交按钮</button>
+      <button onclick="window.cg=quillFn.getDraft()">获取草稿</button>
       <button onclick="quillFn.setImg(17,2)">插入loading图片</button>
       <button
         onclick="quillFn.setImg(17,1,`https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2569057852,1735884540&fm=58`)">插入已上传图片</button>
@@ -30,7 +33,7 @@
       <button onclick="quillFn.delText()">删除文字</button>
       <button onclick="quillFn.getLength()">获取文字长度</button>
       <button onclick="quillFn.getText()">获取文字</button>
-      <button onclick="quillFn.setContents()">插入内容</button>
+      <button onclick="quillFn.setContents(JSON.stringify(window.cg))">插入内容</button>
       <button onclick="quillFn.setFontSize()">设置size</button>
       <button onclick="quillFn.showTitle(true)">显示title</button>
       <button onclick="quillFn.showTitle(false)">隐藏title</button>

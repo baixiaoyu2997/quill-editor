@@ -25,17 +25,14 @@ export const initTextLink = (topicId, coinId) => {
   if (coinId) textLink.coin = findBoltByDataId(coinId)
 }
 
-// TODO : 不确定是否需要前端处理
-// export const initImg = () => {
-//   document.querySelectorAll('.quill-img').forEach(x => {
-//     const img = x.querySelector('img')
-//     img.src = imgServer + img.src
-//     loadingImgs[x.dataset.id] = {
-//       code: 1,
-//       bolt: findBoltByDataId(x.dataset.id)
-//     }
-//   })
-// }
+export const initImg = () => {
+  document.querySelectorAll('.quill-img').forEach(x => {
+    loadingImgs[x.dataset.id] = {
+      code: 1,
+      bolt: findBoltByDataId(x.dataset.id)
+    }
+  })
+}
 
 // 提交
 export const getContents = () => {
@@ -56,6 +53,25 @@ export const getContents = () => {
     ...commitObj
   }
   return contents
+}
+export const setContents = str => {
+  const { html, topicId, coinId, title } = JSON.parse(str)
+  showTitle(Boolean(title))
+  if (title) {
+    titleEl.value = title
+  }
+  initHtmlValue(html)
+  initTextLink(topicId, coinId)
+  initImg()
+}
+// 草稿
+export const getDraft = () => {
+  const content = quill.getContents()
+  // 与初始值不一样
+  const hasContentChange = content.diff(initQuillValue).ops.length !== 0
+  if (hasContentChange) {
+    return getContents()
+  }
 }
 export const getFocus = (bool = true) => {
   // 设置参数true，编辑器会先获取焦点

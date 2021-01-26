@@ -1,6 +1,3 @@
-import Quill from 'quill'
-const Delta = Quill.import('delta')
-
 // 用于后台进行区分的特殊格式
 export const formatSubmit = delta => {
   const obj = {
@@ -40,4 +37,13 @@ export const formatSubmit = delta => {
     }
   })
   return obj
+}
+export const switchTheme = theme => {
+  const htmlEl = document.documentElement
+
+  if (htmlEl.className !== '' || theme === 'light') {
+    htmlEl.className = ''
+  } else {
+    htmlEl.className = 'dark-mode'
+  }
 }

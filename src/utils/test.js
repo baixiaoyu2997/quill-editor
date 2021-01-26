@@ -13,12 +13,7 @@ export const getText = () => {
   console.log(quill.getText())
   return quill.getText()
 }
-export const setContents = () => {
-  quill.setContents([
-    { insert: 'Hello ' },
-    { insert: 'World!', attributes: { bold: true } }
-  ])
-}
+
 export const setFontSize = () => {
   quill.format('size', 'huge')
 }
