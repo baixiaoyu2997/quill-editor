@@ -8,10 +8,11 @@ import '../src/assets/css/readOnly-dark.css'
 
 import './components'
 import * as quillFn from './utils/quillFn'
-import './utils/dsBridge'
+import { getAppConfig } from './utils/dsBridge'
+import { setGlobal } from '../src/global'
 
 if (process.env.NODE_ENV === 'development') {
-  require('./index.html')
+  window.setGlobal = setGlobal
   document.querySelector('.test').classList.remove('test')
 }
 if (process.env.TEST_ENV === 'dev') {
@@ -20,4 +21,8 @@ if (process.env.TEST_ENV === 'dev') {
 if (module.hot) {
   module.hot.accept()
 }
+
 window.quillFn = { ...quillFn }
+
+// 获取app配置
+setGlobal(getAppConfig({}, 'client'))

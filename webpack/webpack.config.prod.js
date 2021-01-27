@@ -16,8 +16,8 @@ module.exports = merge(common, {
   stats: 'errors-only',
   bail: true,
   entry: {
-    light: '/entry/light.js',
-    dark: '/entry/dark.js'
+    light: '/src/index.js',
+    dark: '/src/index.js'
   },
   output: {
     filename: 'js/[name].[chunkhash:8].js',
@@ -33,13 +33,19 @@ module.exports = merge(common, {
       filename: 'light.html',
       chunks: ['light'],
       inlineSource: '.(js)$',
-      template: Path.resolve(__dirname, '../src/index.html')
+      template: Path.resolve(__dirname, '../src/index.ejs'),
+      templateParameters: {
+        theme: ''
+      }
     }),
     new HtmlWebpackPlugin({
       filename: 'dark.html',
       chunks: ['dark'],
       inlineSource: '.(js)$',
-      template: Path.resolve(__dirname, '../src/index.html')
+      template: Path.resolve(__dirname, '../src/index.ejs'),
+      templateParameters: {
+        theme: 'dark-mode'
+      }
     }),
     new HTMLInlineCSSWebpackPlugin(),
     new HtmlWebpackInlineSourcePlugin(HtmlWebpackPlugin)

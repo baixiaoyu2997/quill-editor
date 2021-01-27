@@ -218,11 +218,7 @@ export const scrollToFocus = (index = getFocus()) => {
     top: quill.getBounds(index).top
   })
 }
-export const setLang = lang => {
-  setGlobal('LANG', lang)
-  changeLanguage()
-}
-const changeLanguage = () => {
+export const changeLanguage = () => {
   if (globals.SHOW_TITLE) {
     document
       .getElementById('title')

@@ -1,3 +1,5 @@
+import { switchTheme } from '../utils'
+import { changeLanguage } from '../utils/quillFn'
 const dsBridge = require('dsbridge')
 
 export const lang = {
@@ -18,9 +20,27 @@ export const globals = {
   THEME: 'light',
   LANG: 'zh'
 }
-export const setGlobal = (name, value) => {
-  if (name === 'CAN_SUBMIT' && value !== globals.CAN_SUBMIT) {
-    dsBridge.call('canSubmit', value ? '1' : '0')
+export const setGlobal = (key, value) => {
+  if (!key) return
+  let newKey = key
+  if (typeof newKey === 'string') {
+    newKey = {
+      [newKey]: value
+    }
   }
-  globals[name] = value
+  Object.keys(newKey).forEach(key => {
+    if (newKey[key] === undefined) return
+    if (key === 'CAN_SUBMIT' && newKey[key] !== globals.CAN_SUBMIT) {
+      dsBridge.call('canSubmit', newKey[key] ? '1' : '0')
+    }
+    if (key === 'THEME') {
+      switchTheme(newKey[key])
+    }
+    if (Object.prototype.hasOwnProperty.call(globals, key)) {
+      globals[key] = newKey[key]
+    }
+    if (key === 'LANG') {
+      changeLanguage()
+    }
+  })
 }
