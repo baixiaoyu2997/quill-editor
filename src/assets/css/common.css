@@ -115,15 +115,3 @@ body {
 #scrolling-container .hide {
   display: none;
 }
-
-#scrolling-container .test {
-  display: none;
-}
-
-#scrolling-container .flot {
-  font-size: 20px;
-  position: absolute;
-  bottom: 0;
-  left: 15;
-  right: 15;
-}

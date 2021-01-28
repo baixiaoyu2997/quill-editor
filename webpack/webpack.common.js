@@ -9,7 +9,9 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin()
+    new HtmlWebpackPlugin({
+      template: Path.resolve(__dirname, '../src/dev.html')
+    })
   ],
   resolve: {
     alias: {

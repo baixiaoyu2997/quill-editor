@@ -27,7 +27,8 @@ module.exports = merge(common, {
     }),
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
-      inlineSource: '.(js)$'
+      inlineSource: '.(js)$',
+      template: Path.resolve(__dirname, '../src/index.html')
     }),
     new HTMLInlineCSSWebpackPlugin(),
     new HtmlWebpackInlineSourcePlugin(HtmlWebpackPlugin)
