@@ -36,8 +36,10 @@
       <button onclick="quillFn.setFontSize()">设置size</button>
       <button onclick="quillFn.showTitle(true)">显示title</button>
       <button onclick="quillFn.showTitle(false)">隐藏title</button>
-      <button onclick="setGlobal('LANG','zh')">中文</button>
-      <button onclick="setGlobal('LANG','en')">英文</button>
+      <button onclick="getAppConfig({'theme':'dark'},'app')">dark</button>
+      <button onclick="getAppConfig({'theme':'light'},'app')">light</button>
+      <button onclick="getAppConfig({'language':'zh'})">中文</button>
+      <button onclick="getAppConfig({'language':'en'})">英文</button>
       <button onclick="quillFn.canSubmit()">能否提交</button>
     </div>
   </div>

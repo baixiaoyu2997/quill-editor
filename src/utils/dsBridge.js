@@ -1,3 +1,4 @@
+import { setGlobal } from '../global'
 import {
   setImg,
   getContents,
@@ -14,7 +15,7 @@ export const getAppConfig = (config, from = 'app') => {
   const formatConfig = {}
   if (newConfig?.theme) formatConfig.THEME = newConfig.theme
   if (newConfig?.language) formatConfig.LANG = newConfig.language
-  return formatConfig
+  return setGlobal(formatConfig)
 }
 dsBridge.register('insertImage', setImg) // id, code, url
 dsBridge.register('getContent', getContents)
@@ -24,4 +25,4 @@ dsBridge.register('insertTopic', (id, name) => setTextLink(id, name, 'topic')) /
 dsBridge.register('insertCoin', (id, name) => setTextLink(id, name, 'coin')) // 插入比特币
 dsBridge.register('scrollToFocus', scrollToFocus)
 dsBridge.register('getDraft', getDraft) // 无值时返回undefined
-dsBridge.register('onAppConfigChange', config => getAppConfig(config, 'app')) // 无值时返回undefined
+dsBridge.register('onAppConfigChange', config => getAppConfig(config, 'app'))

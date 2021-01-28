@@ -9,10 +9,9 @@ import '../src/assets/css/readOnly-dark.css'
 import './components'
 import * as quillFn from './utils/quillFn'
 import { getAppConfig } from './utils/dsBridge'
-import { setGlobal } from '../src/global'
 
 if (process.env.NODE_ENV === 'development') {
-  window.setGlobal = setGlobal
+  window.getAppConfig = getAppConfig
 }
 
 if (module.hot) {
@@ -22,4 +21,4 @@ if (module.hot) {
 window.quillFn = { ...quillFn }
 
 // 获取app配置
-setGlobal(getAppConfig({}, 'web'))
+getAppConfig({}, 'web')
