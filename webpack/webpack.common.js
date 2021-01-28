@@ -9,12 +9,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({
-      template: Path.resolve(__dirname, '../src/index.ejs'),
-      templateParameters: {
-        theme: ''
-      }
-    })
+    new HtmlWebpackPlugin()
   ],
   resolve: {
     alias: {

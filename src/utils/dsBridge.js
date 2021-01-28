@@ -10,8 +10,7 @@ import {
 const dsBridge = require('dsbridge')
 
 export const getAppConfig = (config, from = 'app') => {
-  let newConfig = from === 'app' ? config : dsBridge.call('getAppConfig')
-  newConfig = config && JSON.parse(config)
+  const newConfig = from === 'app' ? config : dsBridge.call('getAppConfig')
   const formatConfig = {}
   if (newConfig?.theme) formatConfig.THEME = newConfig.theme
   if (newConfig?.language) formatConfig.LANG = newConfig.language

@@ -15,10 +15,7 @@ module.exports = merge(common, {
   devtool: 'cheap-module-source-map',
   stats: 'errors-only',
   bail: true,
-  entry: {
-    light: '/src/index.js',
-    dark: '/src/index.js'
-  },
+  entry: '/src/index.js',
   output: {
     filename: 'js/[name].[chunkhash:8].js',
     chunkFilename: 'js/[name].[chunkhash:8].chunk.js'
@@ -30,22 +27,7 @@ module.exports = merge(common, {
     }),
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
-      filename: 'light.html',
-      chunks: ['light'],
-      inlineSource: '.(js)$',
-      template: Path.resolve(__dirname, '../src/index.ejs'),
-      templateParameters: {
-        theme: ''
-      }
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'dark.html',
-      chunks: ['dark'],
-      inlineSource: '.(js)$',
-      template: Path.resolve(__dirname, '../src/index.ejs'),
-      templateParameters: {
-        theme: 'dark-mode'
-      }
+      inlineSource: '.(js)$'
     }),
     new HTMLInlineCSSWebpackPlugin(),
     new HtmlWebpackInlineSourcePlugin(HtmlWebpackPlugin)

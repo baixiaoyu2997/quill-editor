@@ -35,18 +35,24 @@ export const initImg = () => {
 }
 
 // 提交
-export const getContents = () => {
+export const getContents = (options = {}) => {
+  const { splitHost = true } = options
   const commitObj = formatSubmit(quill.getContents())
   let html = quill.root.innerHTML
+  // 对图片做处理
   const reg = /http(s)?:\/\/(.*?)\//
-  // 去除图片链接中的host
-  Object.keys(loadingImgs)
-    .filter(x => loadingImgs[x].code === 1)
-    .forEach(x => {
-      const imgHTML = loadingImgs[x].bolt.domNode.innerHTML
-      const newImgHTML = imgHTML.replace(reg, '/')
-      html = html.replace(String(imgHTML), newImgHTML)
-    })
+  Object.keys(loadingImgs).forEach(x => {
+    const imgDOM = loadingImgs[x].bolt.domNode
+    const isLoading = loadingImgs[x].code === 2
+    // 删除加载中图片
+    if (isLoading) {
+      html = html.replace(String(imgDOM.outerHTML), '')
+    } else if (loadingImgs[x].code === 1 && splitHost) {
+      // 去除图片host
+      const newImgHTML = imgDOM.innerHTML.replace(reg, '/')
+      html = html.replace(String(imgDOM.innerHTML), newImgHTML)
+    }
+  })
   const contents = {
     title: globals.SHOW_TITLE ? titleEl.value : '',
     html,
@@ -60,7 +66,13 @@ export const setContents = str => {
   if (title) {
     titleEl.value = title
   }
-  initHtmlValue(html)
+  // 防止转换过程中产生新的行
+  initHtmlValue(
+    html
+      .replace(/<p><br><\/p>/g, '<br>')
+      .replace(/<p>/g, '')
+      .replace(/<\/p>/g, '<br>')
+  )
   initTextLink(topicId, coinId)
   initImg()
 }
@@ -70,7 +82,7 @@ export const getDraft = () => {
   // 与初始值不一样
   const hasContentChange = content.diff(initQuillValue).ops.length !== 0
   if (hasContentChange) {
-    return getContents()
+    return getContents({ splitHost: false })
   }
 }
 export const getFocus = (bool = true) => {
@@ -175,6 +187,7 @@ export const canSubmit = () => {
   setGlobal('CAN_SUBMIT', flag)
   return flag
 }
+
 export const onTextChange = (delta, oldDelta, source) => {
   const newDelta = quill.getContents()
 
@@ -238,7 +251,7 @@ quill.on('text-change', onTextChange)
 quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
   const ops = []
   delta.ops.forEach(op => {
-    if (Array.from(node.classList).includes('quill-img')) {
+    if (Array.from(node.classList).includes('quill-img') && op.insert?.image) {
       const src = node.querySelector('img').src
       ops.push({ insert: { image: { ...op.insert.image, src } } })
     } else if (!op?.insert?.image) {
@@ -248,5 +261,5 @@ quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
     }
   })
   delta.ops = ops
-  return delta
+  return ops.length === 0 ? new Delta() : delta
 })

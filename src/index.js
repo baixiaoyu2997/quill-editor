@@ -25,4 +25,4 @@ if (module.hot) {
 window.quillFn = { ...quillFn }
 
 // 获取app配置
-setGlobal(getAppConfig({}, 'client'))
+setGlobal(getAppConfig({}, 'web'))
