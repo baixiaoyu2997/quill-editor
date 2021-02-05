@@ -66,7 +66,7 @@ export const setContents = str => {
   if (title) {
     titleEl.value = title
   }
-  // 防止转换过程中产生新的行
+  // 防止转换过程中产生新的行(cms不会出现这个问题)
   initHtmlValue(
     html
       .replace(/<p><br><\/p>/g, '<br>')
@@ -255,11 +255,9 @@ quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
       const src = node.querySelector('img').src
       ops.push({ insert: { image: { ...op.insert.image, src } } })
     } else if (!op?.insert?.image) {
-      ops.push({
-        insert: op.insert
-      })
+      ops.push(op)
     }
   })
   delta.ops = ops
-  return ops.length === 0 ? new Delta() : delta
+  return delta
 })
